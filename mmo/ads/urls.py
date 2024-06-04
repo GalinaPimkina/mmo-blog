@@ -1,7 +1,6 @@
 from django.urls import path
 
-appname = 'ads'
+app_name = 'ads'
 
 urlpatterns = [
-    path(),
 ]
