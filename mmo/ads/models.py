@@ -14,6 +14,7 @@ class Post(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name="Category")
+    icon = models.ImageField(upload_to="icons/", verbose_name="Icon")
 
 
 class Comment(models.Model):
