@@ -20,3 +20,8 @@ class Category(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comment", verbose_name="Comment")
+
+
+class News(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Title')
+    content = models.TextField() # д.б текст картинки видео и тд
