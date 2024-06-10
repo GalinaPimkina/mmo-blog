@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import Post, News, Category
+from .utils import DataMixin
 
 
 class IndexView(ListView):
@@ -33,3 +34,19 @@ class PostView(ListView):
     extra_context = {
         'title': 'All ads',
     }
+
+
+class PostDetailView(DataMixin, DetailView):
+    '''страница конкретного поста'''
+
+    model = Post
+    template_name = 'ads/post_detail_page.html'
+    slug_url_kwarg = 'post_slug'
+    slug_field = 'post_slug'
+    context_object_name = 'post'
+
+    # def get_context_data(self, **kwargs):
+    #     context =super().get_context_data(**kwargs)
+    #     return self.get_mixin_context(context,
+    #                             title=context['post'].title,
+    #             )

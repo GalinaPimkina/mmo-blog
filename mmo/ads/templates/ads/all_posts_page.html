@@ -2,7 +2,12 @@
 
 {% block content %}
     {% for p in posts %}
-        <p>{{ p.title }}</p>
-        <p>{{ p.content|truncatewords:30 }}</p>
+        <ul>
+            <li>
+                <p>{{ p.title }}</p>
+                <p>{{ p.content|truncatewords:30 }}</p>
+            </li>
+        </ul>
+
     {% endfor %}
 {% endblock content %}

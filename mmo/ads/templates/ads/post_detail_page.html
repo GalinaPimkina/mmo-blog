@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
+    <p>{{ post.content }}</p>
+    <div>
+      <p>Откликнуться</p>
+    </div>
+{% endblock content %}
