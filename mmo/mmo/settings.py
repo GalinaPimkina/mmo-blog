@@ -124,8 +124,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "ads.User"
+AUTH_USER_MODEL = "ads.User" # расширенная модель юзера
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+LOGIN_REDIRECT_URL = 'ads:index'
+LOGIN_URL = 'users:login'
+LOGOUT_REDIRECT_URL = 'ads:index'
