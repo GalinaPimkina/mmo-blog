@@ -45,8 +45,4 @@ class PostDetailView(DataMixin, DetailView):
     slug_field = 'post_slug'
     context_object_name = 'post'
 
-    # def get_context_data(self, **kwargs):
-    #     context =super().get_context_data(**kwargs)
-    #     return self.get_mixin_context(context,
-    #                             title=context['post'].title,
-    #             )
+
