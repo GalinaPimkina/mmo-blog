@@ -129,6 +129,6 @@ AUTH_USER_MODEL = "ads.User" # расширенная модель юзера
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOGIN_REDIRECT_URL = 'ads:index'
 LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'ads:index'
 LOGOUT_REDIRECT_URL = 'ads:index'
