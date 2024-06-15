@@ -59,3 +59,6 @@ class News(models.Model):
 
     def __str__(self):
         return f"{self.time_create} - {self.title}"
+
+    def get_absolute_url(self):
+        return reverse('ads:news_detail', kwargs={'news_slug': self.news_slug})
