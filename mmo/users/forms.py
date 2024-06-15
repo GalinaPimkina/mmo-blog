@@ -4,6 +4,8 @@ from django import forms
 
 
 class LoginUserForm(AuthenticationForm):
+    '''форма авторизации'''
+
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
 
@@ -13,6 +15,8 @@ class LoginUserForm(AuthenticationForm):
 
 
 class RegistrationUserForm(UserCreationForm):
+    '''форма регистрации'''
+
     username = forms.CharField()
     password1 = forms.CharField(widget=forms.PasswordInput(), label='Password')
     password2 = forms.CharField(widget=forms.PasswordInput(), label='Repeat password')
@@ -21,3 +25,11 @@ class RegistrationUserForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = ['username', 'email', 'password1', 'password2']
+
+    def clean_email(self):
+        '''проверка уникальности email при регистрации'''
+
+        email = self.cleaned_data['email']
+        if get_user_model().objects.filter(email=email).exists():
+            raise forms.ValidationError("This e-mail is used already!")
+        return email
