@@ -67,6 +67,10 @@ class PostCreateView(DataMixin, CreateView):
         post.author = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Добавить объявление')
+
 
 class NewsDetailView(DataMixin, DetailView):
     '''страница конкретного поста'''
@@ -94,3 +98,7 @@ class NewsCreateView(DataMixin, CreateView):
         post = form.save(commit=False)
         post.author = self.request.user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Добавить новость')
