@@ -1,8 +1,8 @@
 menu = [
-    {'title': 'Главная страница', 'url_name': 'index'},
-    {'title': 'Добавить новость', 'url_name': 'add_news'},
-    {'title': 'Поиск пати', 'url_name': 'all_posts'},
-    {'title': 'Создать заявку', 'url_name': 'add_post'},
+    {'title': 'Главная страница', 'url_name': 'ads:index'},
+    {'title': 'Добавить новость', 'url_name': 'ads:add_news'}, #
+    {'title': 'Поиск пати', 'url_name': 'ads:all_posts'},
+    {'title': 'Создать заявку', 'url_name': 'ads:add_post'},
     {'title': 'Войти', 'url_name': 'users:login'},
 ]
 

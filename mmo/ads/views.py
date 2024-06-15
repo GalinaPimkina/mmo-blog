@@ -1,5 +1,6 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
+from .forms import AddPostForm
 from .models import Post, News, Category
 from .utils import DataMixin
 
@@ -53,3 +54,15 @@ class PostDetailView(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
 
+class PostCreateView(DataMixin, CreateView):
+    '''добавление поста'''
+
+    form_class = AddPostForm
+    template_name = 'ads/add_post.html'
+
+    def form_valid(self, form):
+        '''автоматическое присвоения автора'''
+
+        post = form.save(commit=False)
+        post.author = self.request.user
+        return super().form_valid(form)
