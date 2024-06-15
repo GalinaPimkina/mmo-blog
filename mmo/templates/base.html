@@ -8,6 +8,14 @@
     <title>{{ title }}</title>
 </head>
 <body>
+{% block mainmenu %}
+<nav>
+    {% for m in menu %}
+        {{ m.title }}
+    {% endfor %}
+</nav>
+{% endblock mainmenu %}
+
 {% block content %}
 {% endblock content %}
 </body>

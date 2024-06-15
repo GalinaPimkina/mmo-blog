@@ -1,39 +1,42 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
 from .models import Post, News, Category
 from .utils import DataMixin
 
 
-class IndexView(ListView):
+class IndexView(DataMixin, ListView):
     '''главная страница с новостями'''
     model = News
     template_name = 'ads/index.html'
     context_object_name = 'news'
-    extra_context = {
-        'title': 'Home page',
-    }
 
-class CategoryView(ListView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Главная страница')
+
+
+class CategoryView(DataMixin, ListView):
     '''страница всех категорий'''
 
     model = Category
     template_name = 'ads/category_page.html'
     context_object_name = 'categories'
-    extra_context = {
-        'title': 'Categories',
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Классы')
 
 
-class PostView(ListView):
+class PostView(DataMixin, ListView):
     '''страница всех объявлений от свежих к старым'''
 
     model = Post
     template_name = 'ads/all_posts_page.html'
     context_object_name = 'posts'
-    extra_context = {
-        'title': 'All ads',
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Все объявления')
 
 
 class PostDetailView(DataMixin, DetailView):
@@ -44,5 +47,9 @@ class PostDetailView(DataMixin, DetailView):
     slug_url_kwarg = 'post_slug'
     slug_field = 'post_slug'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=context['post'].title)
 
 
