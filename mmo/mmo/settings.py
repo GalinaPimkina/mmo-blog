@@ -37,9 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ads.apps.AdsConfig', # регистрация приложения ads
-    'users.apps.UsersConfig', # регистрация приложения users
+    'ads.apps.AdsConfig',
+    'users.apps.UsersConfig',
+    'django.contrib.sites'
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
 ]
 
 ROOT_URLCONF = 'mmo.urls'
@@ -132,3 +136,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'ads:index'
 LOGOUT_REDIRECT_URL = 'ads:index'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
