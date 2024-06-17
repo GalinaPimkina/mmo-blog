@@ -93,7 +93,7 @@ class NewsCreateView(DataMixin, CreateView):
     template_name = 'ads/add_news.html'
 
     def form_valid(self, form):
-        '''автоматическое присвоения автора'''
+        '''автоматическое присвоение автора'''
 
         post = form.save(commit=False)
         post.author = self.request.user
