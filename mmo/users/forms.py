@@ -52,3 +52,12 @@ class ProfileUserForm(forms.ModelForm):
             'first_name': 'Имя',
             'last_name': 'Фамилия',
         }
+
+class ConfirmEmailForm(forms.ModelForm):
+    token = forms.CharField(max_length=6, label='Введите проверочный код')
+
+    class Meta:
+        model = get_user_model()
+        fields = ['token', ]
+
+

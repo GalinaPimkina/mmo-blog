@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from autoslug import AutoSlugField
@@ -8,6 +7,7 @@ from django.urls import reverse
 class User(AbstractUser):
     nickname = models.CharField(max_length=50, verbose_name="Nickname")
     avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", default=None, blank=True, null=True, verbose_name="Avatar")
+    token = models.CharField(max_length=6, null=True, blank=True, verbose_name='Токен')
 
     def __str__(self):
         return self.username
