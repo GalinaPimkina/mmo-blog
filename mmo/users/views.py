@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-
 from ads.models import User
 from ads.utils import DataMixin
 from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm, ConfirmEmailForm
@@ -35,6 +34,8 @@ class RegistrationUserView(DataMixin, CreateView):
         return self.get_mixin_context(context, title='Регистрация')
 
     def form_valid(self, form):
+        '''присвоение юзеру токена и отправка на почту'''
+
         user = form.save(commit=False)
         token = random.randint(100000, 999999)
         user.token = token
@@ -49,7 +50,7 @@ class RegistrationUserView(DataMixin, CreateView):
             fail_silently=False,
         )
 
-        return redirect('users:confirm_email', pk=user.pk)
+        return redirect('users:confirm_email', pk=user.pk) # после отправки токена переход на страницу подтверждения
 
 
 class ConfirmEmailView(DataMixin, UpdateView):
@@ -70,13 +71,14 @@ class ConfirmEmailView(DataMixin, UpdateView):
                 user.update(is_active=True) # меняю статус на активный
                 user.update(token=None) # обнуление токена, чтоб не было совпадений при последующих регистрациях
             else:
-                return render(request,
-                              'users/confirm_failed.html', {'title': 'Подтверждение не удалось', 'pk': self.kwargs['pk']})
+                return render(request, 'users/confirm_failed.html', {'title': 'Подтверждение не удалось', 'pk': self.kwargs['pk']}) #если токен введен с ошибкой
 
-        return render(request, 'users/confirm_success.html', {'title': 'Почта подтверждена'})
+        return render(request, 'users/confirm_success.html', {'title': 'Почта подтверждена'}) #если токен введен верно
 
 
 class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
+    '''страница профиля пользователя, его можно редактировать'''
+
     model = get_user_model()
     form_class = ProfileUserForm
     template_name = 'users/profile.html'

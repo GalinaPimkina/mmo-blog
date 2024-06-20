@@ -6,6 +6,7 @@
             <li>
                 <p>{{ p.title }}</p>
                 <p>{{ p.content|truncatewords:30 }}</p>
+                <p><a href="{{ p.get_absolute_url }}">Читать объявление</a></p>
             </li>
         </ul>
 

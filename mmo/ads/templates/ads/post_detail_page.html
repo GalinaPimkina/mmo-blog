@@ -4,6 +4,6 @@
     <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
     <p>{{ post.content }}</p>
     <div>
-      <p>Откликнуться</p>
+      <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
     </div>
 {% endblock content %}

@@ -1,11 +1,13 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView
 
-from .forms import AddPostForm, AddNewsForm
-from .models import Post, News, Category
+from .forms import AddPostForm, AddNewsForm, CreateCommentForm
+from .models import Post, News, Category, Comment
 from .utils import DataMixin
 
 
-class IndexView(DataMixin, ListView):
+class IndexPageView(DataMixin, ListView):
     '''главная страница с новостями'''
     model = News
     template_name = 'ads/index.html'
@@ -16,7 +18,7 @@ class IndexView(DataMixin, ListView):
         return self.get_mixin_context(context, title='Главная страница')
 
 
-class CategoryView(DataMixin, ListView):
+class CategoryPageView(DataMixin, ListView):
     '''страница всех категорий'''
 
     model = Category
@@ -28,7 +30,7 @@ class CategoryView(DataMixin, ListView):
         return self.get_mixin_context(context, title='Классы')
 
 
-class PostView(DataMixin, ListView):
+class AllPostPageView(DataMixin, ListView):
     '''страница всех объявлений от свежих к старым'''
 
     model = Post
@@ -40,7 +42,7 @@ class PostView(DataMixin, ListView):
         return self.get_mixin_context(context, title='Все объявления')
 
 
-class PostDetailView(DataMixin, DetailView):
+class PostDetailPageView(DataMixin, DetailView):
     '''страница конкретного поста'''
 
     model = Post
@@ -54,7 +56,7 @@ class PostDetailView(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
 
-class PostCreateView(DataMixin, CreateView):
+class PostCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
     '''добавление поста'''
 
     form_class = AddPostForm
@@ -72,7 +74,7 @@ class PostCreateView(DataMixin, CreateView):
         return self.get_mixin_context(context, title='Добавить объявление')
 
 
-class NewsDetailView(DataMixin, DetailView):
+class NewsDetailPageView(DataMixin, DetailView):
     '''страница конкретного поста'''
 
     model = News
@@ -86,9 +88,10 @@ class NewsDetailView(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['news'].title)
 
 
-class NewsCreateView(DataMixin, CreateView):
+class NewsCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
     '''добавление новости'''
 
+    model = News
     form_class = AddNewsForm
     template_name = 'ads/add_news.html'
 
@@ -102,3 +105,23 @@ class NewsCreateView(DataMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Добавить новость')
+
+
+class CommentCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
+    model = Comment
+    form_class = CreateCommentForm
+    template_name = 'ads/add_comment.html'
+    context_object_name = 'comment'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Отправить отклик',)
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.author = self.request.user
+        comment.post = Post.objects.get(post_slug=self.kwargs['post_slug'])
+        comment.destination_user = comment.post.author
+        comment.save()
+        return redirect('ads:index')
+
