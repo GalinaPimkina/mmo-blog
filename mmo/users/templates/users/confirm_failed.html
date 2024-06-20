@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>Вы ввели неверный код активации.</p>
+    <p>Ввести код <a href="{% url 'users:confirm_email' pk %}">повторно</a>.</p>
+{% endblock content %}

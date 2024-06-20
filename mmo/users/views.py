@@ -1,20 +1,16 @@
-from django.contrib.auth import get_user_model, login
+import random
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView
-from django.contrib.sites.models import Site
 from django.core.mail import send_mail
-from django.db import models
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views import View
-from django.views.generic import CreateView, UpdateView, TemplateView
+from django.views.generic import CreateView, UpdateView
 
 from ads.models import User
 from ads.utils import DataMixin
-from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm
+from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm, ConfirmEmailForm
 
 
 class LoginUserView(LoginView):
@@ -28,7 +24,7 @@ class LoginUserView(LoginView):
 
 
 class RegistrationUserView(DataMixin, CreateView):
-    '''регистрация нового пользователя'''
+    '''регистрация нового пользователя с присвоением ему токена'''
 
     form_class = RegistrationUserForm
     template_name = 'users/registration.html'
@@ -38,16 +34,47 @@ class RegistrationUserView(DataMixin, CreateView):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Регистрация')
 
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        token = random.randint(100000, 999999)
+        user.token = token
+        user.is_active = False
+        user.save()
 
-def registration_done(request):
-    '''страница приветствия после регистрации'''
+        send_mail(
+            'Подтвердите свой электронный адрес',
+            f'Код активации: {user.token}',
+            'service.mmoblog@gmail.com',
+            [user.email],
+            fail_silently=False,
+        )
 
-    return render(request, 'users/registration_done.html', {'title': 'Регистрация успешна'})
+        return redirect('users:confirm_email', pk=user.pk)
 
-#     def form_valid(self, form):
-#         user = form.save(commit=False)
-#         user.is_active = False
-#         user.save()
+
+class ConfirmEmailView(DataMixin, UpdateView):
+    '''страница ввода и проверки токена'''
+
+    model = User
+    form_class = ConfirmEmailForm
+    template_name = 'users/confirm_email.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Подтверждение e-mail адреса',)
+
+    def post(self, request, *args, **kwargs):
+        if 'token' in request.POST: # если токен есть в коллекции пост
+            user = User.objects.filter(token=request.POST['token']) # ищу юзера по совпадению токена
+            if user.exists(): # если юзер найден
+                user.update(is_active=True) # меняю статус на активный
+                user.update(token=None) # обнуление токена, чтоб не было совпадений при последующих регистрациях
+            else:
+                return render(request,
+                              'users/confirm_failed.html', {'title': 'Подтверждение не удалось', 'pk': self.kwargs['pk']})
+
+        return render(request, 'users/confirm_success.html', {'title': 'Почта подтверждена'})
+
 
 class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
     model = get_user_model()
