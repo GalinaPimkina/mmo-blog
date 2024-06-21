@@ -48,6 +48,9 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.time_create} - {self.post}"
 
+    def get_success_url(self):
+        return reverse('ads:comment_detail', kwargs={'pk': self.pk})
+
 
 class News(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')

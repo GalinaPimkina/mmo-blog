@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% for c in comment %}
+    <p>Комментарий от: {{ c.author }} | Отправлен: {{ c.time_create }}</p>
+    <p>К объявлению: {{ c.post.title }}</p>
+    <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
+    <hr>
+    {% endfor %}
+{% endblock content %}

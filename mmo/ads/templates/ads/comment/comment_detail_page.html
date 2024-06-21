@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h3>{{ comment.post.title }}</h3>
+    <p>{{ comment.post.content }}</p>
+    <hr>
+    <p>От: {{ comment.author }} | Отправлен: {{ comment.time_create }}</p>
+    <p>{{ comment.content }}</p>
+{% endblock content %}
