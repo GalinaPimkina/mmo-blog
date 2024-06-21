@@ -12,13 +12,23 @@
     {% block menu %}
         <nav>
             <ul>
-                {% for m in menu %}
-                    <li class="menu"><a href="{% url m.url_name %}">{{ m.title }}</a></li>
-                {% endfor %}
+                <li class="menu">
+                    <a href="{% url 'ads:index' %}">Главная страница</a>
+                    <a href="{% url 'ads:all_posts' %}">Поиск пати</a>
+                </li>
                 {% if user.is_authenticated %}
-                    <li class="last"><a href="{% url 'users:profile' user.pk %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">Выйти</a></li>
+                    <li class="menu">
+                        <a href="{% url 'ads:add_news' %}">Добавить новость</a>
+                        <a href="{% url 'ads:add_post' %}">Создать заявку</a>
+                    </li>
+                    <li class="last">
+                        <a href="{% url 'ads:comments_incoming' %}">Входящие отклики</a>
+                        <a href="{% url 'ads:comments_outgoing' %}">Мои отклики</a>
+                        <a href="{% url 'users:profile' user.pk %}">{{ user.username }}</a>
+                        <a href="{% url 'users:logout' %}">Выйти</a>
+                    </li>
                 {% else %}
-                    <li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="{% url 'users:registration' %}">Регистрация</a></li>
+                    <li class="last"><a href="{% url 'users:login' %}">Войти</a>  <a href="{% url 'users:registration' %}">Регистрация</a></li>
                 {% endif %}
             </ul>
         </nav>
