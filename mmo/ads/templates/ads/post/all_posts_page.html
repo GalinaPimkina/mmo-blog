@@ -4,9 +4,8 @@
     {% for p in posts %}
         <ul>
             <li>
-                <p>{{ p.title }}</p>
-                <p>{{ p.content|truncatewords:30 }}</p>
-                <p><a href="{{ p.get_absolute_url }}">Читать объявление</a></p>
+                <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+                <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
             </li>
         </ul>
 

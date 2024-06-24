@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
 from .models import Post, News, Category, Comment
@@ -74,6 +74,18 @@ class PostCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Добавить объявление')
+
+
+class PostUpdatePageView(LoginRequiredMixin, DataMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content', 'category']
+    template_name = 'ads/post/add_post.html'
+    slug_field = 'post_slug'
+    slug_url_kwarg = 'post_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Редактировать объявление')
 
 
 class NewsDetailPageView(DataMixin, DetailView):

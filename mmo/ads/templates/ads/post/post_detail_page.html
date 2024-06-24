@@ -3,7 +3,13 @@
 {% block content %}
     <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
     <p>{{ post.content }}</p>
+    <hr>
     <div>
-      <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
+        {% if user == post.author %} <!--если юзер - это автор объявления-->
+            <p></p>
+        {% else %}<!--если юзер НЕ является автором объявления-->
+            <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
+        {% endif %}
     </div>
+    <p><a href="{% url 'ads:edit_post' post.post_slug %}">Редактировать объявление</a></p>
 {% endblock content %}

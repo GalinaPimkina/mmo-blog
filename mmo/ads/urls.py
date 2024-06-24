@@ -15,6 +15,7 @@ urlpatterns = [
     path('posts/', views.AllPostPageView.as_view(), name='all_posts'),#страница с объявлениями о поиске
     path('post/add/', views.PostCreatePageView.as_view(), name='add_post'),#добавить объявление
     path('post/<str:post_slug>/', views.PostDetailPageView.as_view(), name='post_detail'),#страница выбранного объявления
+    path('post/<str:post_slug>/edit/', views.PostUpdatePageView.as_view(), name='edit_post'),#страница выбранн
 
     path('post/<str:post_slug>/add_comment/', views.CommentCreatePageView.as_view(), name='add_comment'),#добавить комментарий
 
