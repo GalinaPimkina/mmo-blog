@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
@@ -169,3 +169,26 @@ class CommentDetailPageView(LoginRequiredMixin, DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context,
                                       title=f"От {context['comment'].author} | Получен: {context['comment'].time_create}")
+
+
+def comment_receive(request, pk):
+    '''если получатель принимает отклик, то в модели Comment поле received становится True. Изначально оно всегда False(не принят)
+     Устанавливает параметр processed в True'''
+
+    comment = Comment.objects.get(id=pk)
+    comment.received = True
+    comment.rejected = False
+    comment.processed = True
+    comment.save()
+    return redirect('ads:comment_detail', pk=pk)
+
+
+def comment_rejected(request, pk):
+    '''срабатывает, когда отклик отклонили. Устанавливает параметр processed в True'''
+
+    comment = Comment.objects.get(id=pk)
+    comment.received = False
+    comment.rejected = True
+    comment.processed = True
+    comment.save()
+    return redirect('ads:comment_detail', pk=pk)
