@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for p in posts %}
-        <ul>
-            <li>
-                <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
-                <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
-            </li>
-        </ul>
-
-    {% endfor %}
+    {% if posts %}
+        {% for p in posts %}
+            <ul>
+                <li>
+                    <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+                    <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
+                </li>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>Записи отсутствуют.</p>
+    {% endif %}
 {% endblock content %}

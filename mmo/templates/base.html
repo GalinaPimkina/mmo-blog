@@ -22,6 +22,7 @@
                         <a href="{% url 'ads:add_post' %}">Создать заявку</a>
                     </li>
                     <li class="last">
+                        <a href="{% url 'ads:user_post_page' %}">Мои объявления</a>
                         <a href="{% url 'ads:comments_incoming' %}">Входящие отклики</a>
                         <a href="{% url 'ads:comments_outgoing' %}">Мои отклики</a>
                         <a href="{% url 'users:profile' user.pk %}">{{ user.username }}</a>

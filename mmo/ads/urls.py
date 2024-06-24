@@ -12,7 +12,8 @@ urlpatterns = [
 
     path('categories/', views.CategoryPageView.as_view(), name='categories'),#страница категорий
 
-    path('posts/', views.AllPostPageView.as_view(), name='all_posts'),#страница с объявлениями о поиске
+    path('posts/', views.AllPostPageView.as_view(), name='all_posts'),#страница со всеми объявлениями о поиске
+    path('posts/user/', views.UserPostPageView.as_view(), name='user_post_page'),#страница объявлений конкретного юзера
     path('post/add/', views.PostCreatePageView.as_view(), name='add_post'),#добавить объявление
     path('post/<str:post_slug>/', views.PostDetailPageView.as_view(), name='post_detail'),#страница выбранного объявления
     path('post/<str:post_slug>/edit/', views.PostUpdatePageView.as_view(), name='edit_post'),#страница выбранн

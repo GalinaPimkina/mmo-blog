@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block content %}
-    {% for cat in categories %}
-    <p><img src="{{ cat.icon.url }}"> {{ cat.name }}</p>
-    {% endfor %}
+    {% if categories %}
+        {% for cat in categories %}
+        <p>{{ cat.name }}</p>
+        {% endfor %}
+    {% else %}
+        <p>Записи отсутствуют.</p>
+    {% endif %}
 {% endblock content %}

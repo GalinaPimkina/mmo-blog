@@ -77,6 +77,8 @@ class PostCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
 
 
 class PostUpdatePageView(LoginRequiredMixin, DataMixin, UpdateView):
+    '''редактирование объявления'''
+
     model = Post
     fields = ['title', 'content', 'category']
     template_name = 'ads/post/add_post.html'
@@ -86,6 +88,21 @@ class PostUpdatePageView(LoginRequiredMixin, DataMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Редактировать объявление')
+
+
+class UserPostPageView(LoginRequiredMixin, DataMixin, ListView):
+    '''страница объявлений пользователя'''
+
+    model = Post
+    template_name = 'ads/post/user_post_page.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Мои объявления')
 
 
 class NewsDetailPageView(DataMixin, DetailView):

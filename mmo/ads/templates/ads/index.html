@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for n in news %}
-        <ul>
-            <li>
-                <p><h3>{{ n.title }}</h3></p>
-                <p>{{ n.content|truncatewords:20 }}</p>
-            </li>
-        </ul>
-    {% endfor %}
+    {% if news %}
+        {% for n in news %}
+            <ul>
+                <li>
+                    <p><h3>{{ n.title }}</h3></p>
+                    <p>{{ n.content|truncatewords:20 }}</p>
+                </li>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>Записи отсутствуют.</p>
+    {% endif %}
 {% endblock content %}
