@@ -3,8 +3,17 @@
 
 {% block content %}
     {% for c in comment %}
-    <p>Отклик к объявлению: {{ c.post.title }} | Отправлен: {{ c.time_create }}</p>
+    <p>Отклик к объявлению: {{ c.post.title }} | Отправлен: {{ c.time_create }} | Авантюристу: {{ c.post.author }}</p>
     <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
+    {% if c.processed %}<!--если отклик ОБРАБОТАН-->
+        {% if comment.received == True %}<!--если принят-->
+            <p>Принято</p>
+        {% else %}<!--если отклонен-->
+            <p>Отклонено</p>
+        {% endif %}
+    {% else %}<!--если отклик НЕ ОБРАБОТАН-->
+        <p>Ждет рассмотрения</p>
+    {% endif %}
     <hr>
     {% endfor %}
 {% endblock content %}

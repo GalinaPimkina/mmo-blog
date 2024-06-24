@@ -7,4 +7,17 @@
     <hr>
     <p>От: {{ comment.author }} | Отправлен: {{ comment.time_create }}</p>
     <p>{{ comment.content }}</p>
+    {% if comment.processed == False %} <!--если отклик НЕ ОБРАБОТАН-->
+        {% if user == comment.author %} <!--если юзер - это автор отклика-->
+            <p>Ожидает рассмотрения</p>
+        {% else %}<!--если юзер НЕ является автором отклика-->
+            <a href="{% url 'ads:comment_receive' comment.pk %}">Принять</a> <a href="{% url 'ads:comment_rejected' comment.pk %}">Отклонить</a>
+        {% endif %}
+    {% else %}<!--если отклик ОБРАБОТАН-->
+        {% if comment.received == True %}<!--если принято-->
+            <p>Приглашение отправлено</p>
+        {% else %}<!--если отклонено-->
+            <p>Отклонено</p>
+        {% endif %}
+    {% endif %}
 {% endblock content %}

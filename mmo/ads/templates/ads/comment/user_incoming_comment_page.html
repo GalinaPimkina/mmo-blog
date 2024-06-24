@@ -6,6 +6,11 @@
     <p>Комментарий от: {{ c.author }} | Отправлен: {{ c.time_create }}</p>
     <p>К объявлению: {{ c.post.title }}</p>
     <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
+    {% if c.processed %}<!--если отклик ОБРАБОТАН-->
+        <p>Обработан</p>
+    {% else %}<!--если отклик НЕ ОБРАБОТАН-->
+        <p>Не обработан</p>
+    {% endif %}
     <hr>
     {% endfor %}
 {% endblock content %}
