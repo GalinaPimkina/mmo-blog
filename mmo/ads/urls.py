@@ -21,4 +21,8 @@ urlpatterns = [
     path('comment/<int:pk>/', views.CommentDetailPageView.as_view(), name='comment_detail'),#страница выбранного комментария
     path('comments/incoming/', views.UserIncomingCommentsPageView.as_view(), name='comments_incoming'),#страница с входящими откликами пользователя
     path('comments/outgoing/', views.UserOutgoingCommentsPageView.as_view(), name='comments_outgoing'),#страница с исходящими откликами пользователя
+
+    path('comment/<int:pk>/receive/', views.comment_receive, name='comment_receive'), #если отклик принят
+    path('comment/<int:pk>/rejected/', views.comment_rejected, name='comment_rejected'),#если отклик отклонен
+
 ]
