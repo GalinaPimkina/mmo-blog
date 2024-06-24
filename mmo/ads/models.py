@@ -44,6 +44,9 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='удален', related_name="author_of_comment", verbose_name="Автор отклика")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
+    received = models.BooleanField(default=False, verbose_name="Принят") # показывает, принят отклик или нет
+    rejected = models.BooleanField(default=False, verbose_name="Отклонен")# показывает, отклонен отклик или нет
+    processed = models.BooleanField(default=False, verbose_name="Обработан") # показывает, обработал ли получатель отклик
 
     def __str__(self):
         return f"{self.time_create} - {self.post}"
