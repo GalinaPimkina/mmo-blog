@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if posts %}<!--если есть-->
+        {% for p in posts %}
+            <ul>
+                <li>
+                    <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+                    <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
+                    {% if p.closed %}<!--если объявление закрыто-->
+                        <p>Объявление закрыто</p>
+                    {% endif %}
+                </li>
+            </ul>
+        {% endfor %}
+    {% else %}<!--если пустой queryset-->
+        <p>Записи отсутствуют.</p>
+    {% endif %}
+{% endblock content %}

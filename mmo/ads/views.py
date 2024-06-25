@@ -24,7 +24,7 @@ class CategoryPageView(DataMixin, ListView):
     '''страница всех категорий'''
 
     model = Category
-    template_name = 'ads/category_page.html'
+    template_name = 'ads/category/category_page.html'
     context_object_name = 'categories'
 
     def get_context_data(self, **kwargs):
@@ -103,6 +103,31 @@ class UserPostPageView(LoginRequiredMixin, DataMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Мои объявления')
+
+
+class PostFromCategoryPageView(DataMixin, ListView):
+    '''страница объявлений по категориям'''
+
+    model = Post
+    template_name = 'ads/post/post_from_category_page.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        self.category = Category.objects.get(category_slug=self.kwargs['category_slug'])
+        return Post.objects.filter(category=self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=f"Объявления по классу: {self.category}")
+
+
+def close_post(request, post_slug):
+    '''закрыть объявление, поле closed  в модели Post переводит в True'''
+
+    post = Post.objects.get(post_slug=post_slug)
+    post.closed = True
+    post.save()
+    return redirect('ads:post_detail', post_slug=post_slug)
 
 
 class NewsDetailPageView(DataMixin, DetailView):
@@ -190,6 +215,8 @@ class UserOutgoingCommentsPageView(LoginRequiredMixin, DataMixin, ListView):
 
 
 class CommentDetailPageView(LoginRequiredMixin, DataMixin, DetailView):
+    '''страница конкретного отклика'''
+
     model = Comment
     template_name = 'ads/comment/comment_detail_page.html'
     context_object_name = 'comment'
@@ -221,12 +248,3 @@ def comment_rejected(request, pk):
     comment.processed = True
     comment.save()
     return redirect('ads:comment_detail', pk=pk)
-
-
-def close_post(request, post_slug):
-    '''закрыть объявление, поле closed  в модели Post переводит в True'''
-
-    post = Post.objects.get(post_slug=post_slug)
-    post.closed = True
-    post.save()
-    return redirect('ads:post_detail', post_slug=post_slug)

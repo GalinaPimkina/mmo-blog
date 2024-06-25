@@ -4,7 +4,7 @@
 {% block content %}
     {% if categories %}<!--если есть-->
         {% for cat in categories %}
-        <p>{{ cat.name }}</p>
+            <p><a href="{% url 'ads:post_from_category' cat.category_slug %}">{{ cat.name }}</a></p>
         {% endfor %}
     {% else %}<!--если пустой queryset-->
         <p>Записи отсутствуют.</p>
