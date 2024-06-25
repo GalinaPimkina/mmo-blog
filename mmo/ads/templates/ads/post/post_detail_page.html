@@ -6,7 +6,11 @@
     <hr>
     <div>
         {% if user == post.author %} <!--если юзер - это автор объявления-->
-            <p></p>
+            {% if post.closed %}}<!--если объявление закрыто-->
+                <p>Объявление закрыто</p>
+            {% else %}<!--если объявление НЕ закрыто-->
+                <p><a href="{% url 'ads:close_post' post.post_slug %}">Закрыть объявление</a></p>
+            {% endif %}
         {% else %}<!--если юзер НЕ является автором объявления-->
             <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
         {% endif %}

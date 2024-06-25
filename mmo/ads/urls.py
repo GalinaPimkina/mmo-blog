@@ -16,7 +16,8 @@ urlpatterns = [
     path('posts/user/', views.UserPostPageView.as_view(), name='user_post_page'),#страница объявлений конкретного юзера
     path('post/add/', views.PostCreatePageView.as_view(), name='add_post'),#добавить объявление
     path('post/<str:post_slug>/', views.PostDetailPageView.as_view(), name='post_detail'),#страница выбранного объявления
-    path('post/<str:post_slug>/edit/', views.PostUpdatePageView.as_view(), name='edit_post'),#страница выбранн
+    path('post/<str:post_slug>/edit/', views.PostUpdatePageView.as_view(), name='edit_post'),#редактирование объявления
+    path('post/<str:post_slug>/close/', views.close_post, name='close_post'),# закрыть объявление
 
     path('post/<str:post_slug>/add_comment/', views.CommentCreatePageView.as_view(), name='add_comment'),#добавить комментарий
 
@@ -26,5 +27,4 @@ urlpatterns = [
 
     path('comment/<int:pk>/receive/', views.comment_receive, name='comment_receive'), #если отклик принят
     path('comment/<int:pk>/rejected/', views.comment_rejected, name='comment_rejected'),#если отклик отклонен
-
 ]

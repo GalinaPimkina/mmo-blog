@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
-    {% if categories %}
+    {% if categories %}<!--если есть-->
         {% for cat in categories %}
         <p>{{ cat.name }}</p>
         {% endfor %}
-    {% else %}
+    {% else %}<!--если пустой queryset-->
         <p>Записи отсутствуют.</p>
     {% endif %}
 {% endblock content %}

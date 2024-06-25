@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    {% if comment %}
+    {% if comment %}<!--если есть-->
         {% for c in comment %}
         <p>Комментарий от: {{ c.author }} | Отправлен: {{ c.time_create }}</p>
         <p>К объявлению: {{ c.post.title }}</p>
@@ -14,7 +14,7 @@
         {% endif %}
         <hr>
         {% endfor %}
-    {% else %}
+    {% else %}<!--если пустой queryset-->
         <p>Записи отсутствуют.</p>
     {% endif %}
 {% endblock content %}

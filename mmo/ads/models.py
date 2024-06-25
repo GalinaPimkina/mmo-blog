@@ -21,6 +21,7 @@ class Post(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
     post_slug = AutoSlugField(populate_from='title', db_index=True, unique=True, verbose_name='URL')
+    closed = models.BooleanField(default=False, verbose_name="Объявление закрыто")
 
     def __str__(self):
         return self.title

@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for p in posts %}
-        <ul>
-            <li>
-                <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
-                <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
-            </li>
-        </ul>
-    {% endfor %}
+    {% if posts %}<!--если есть-->
+        {% for p in posts %}
+            <ul>
+                <li>
+                    <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+                    <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
+                    {% if p.closed %}<!--если объявление закрыто-->
+                    <p>Объявление закрыто</p>
+                    {% else %}<!--если объявление НЕ закрыто-->
+                    <p><a href="{% url 'ads:close_post' p.post_slug %}">Закрыть объявление</a></p>
+                    {% endif %}
+                </li>
+            </ul>
+            <hr>
+        {% endfor %}
+    {% else %}<!--если пустой queryset-->
+        <p>Записи отсутствуют.</p>
+    {% endif %}
 {% endblock content %}

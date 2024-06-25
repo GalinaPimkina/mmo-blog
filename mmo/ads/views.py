@@ -221,3 +221,12 @@ def comment_rejected(request, pk):
     comment.processed = True
     comment.save()
     return redirect('ads:comment_detail', pk=pk)
+
+
+def close_post(request, post_slug):
+    '''закрыть объявление, поле closed  в модели Post переводит в True'''
+
+    post = Post.objects.get(post_slug=post_slug)
+    post.closed = True
+    post.save()
+    return redirect('ads:post_detail', post_slug=post_slug)
