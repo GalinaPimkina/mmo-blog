@@ -66,9 +66,12 @@ class ConfirmEmailView(DataMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         if 'token' in request.POST: # если токен есть в коллекции пост
-            user = User.objects.filter(token=request.POST['token']) # ищу юзера по совпадению токена
-            if user.exists(): # если юзер найден
+            token = request.POST['token']
+            user = User.objects.filter(token=token) # ищу юзера по совпадению токена
+            user_for_group = User.objects.get(token=token) # получение конкретного юзера
+            if user.exists(): # если queryset содержит запись
                 user.update(is_active=True) # меняю статус на активный
+                user_for_group.groups.add(3) # при регистрации юзер автоматически получает группу "default_user"
                 user.update(token=None) # обнуление токена, чтоб не было совпадений при последующих регистрациях
             else:
                 return render(request, 'users/confirm_failed.html', {'title': 'Подтверждение не удалось', 'pk': self.kwargs['pk']}) #если токен введен с ошибкой

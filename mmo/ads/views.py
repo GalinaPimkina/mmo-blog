@@ -1,6 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
@@ -8,43 +7,46 @@ from .models import Post, News, Category, Comment
 from .utils import DataMixin
 
 
-class IndexPageView(DataMixin, ListView):
+class IndexPageView(PermissionRequiredMixin, DataMixin, ListView):
     '''главная страница с новостями платформы'''
 
     model = News
     template_name = 'ads/index.html'
     context_object_name = 'news'
+    permission_required = ['ads.view_news', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Главная страница')
 
 
-class CategoryPageView(DataMixin, ListView):
+class CategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
     '''страница всех категорий'''
 
     model = Category
     template_name = 'ads/category/category_page.html'
     context_object_name = 'categories'
+    permission_required = ['ads.view_category', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Классы')
 
 
-class AllPostPageView(DataMixin, ListView):
+class AllPostPageView(PermissionRequiredMixin, DataMixin, ListView):
     '''страница всех объявлений от свежих к старым'''
 
     model = Post
     template_name = 'ads/post/all_posts_page.html'
     context_object_name = 'posts'
+    permission_required = ['ads.view_post', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Все объявления')
 
 
-class PostDetailPageView(DataMixin, DetailView):
+class PostDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, DetailView):
     '''страница конкретного поста'''
 
     model = Post
@@ -52,17 +54,19 @@ class PostDetailPageView(DataMixin, DetailView):
     slug_url_kwarg = 'post_slug'
     slug_field = 'post_slug'
     context_object_name = 'post'
+    permission_required = ['ads.view_post', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title=context['post'].title)
 
 
-class PostCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
+class PostCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     '''добавление поста'''
 
     form_class = AddPostForm
     template_name = 'ads/post/add_post.html'
+    permission_required = ['ads.create_post', ]
 
     def form_valid(self, form):
         '''автоматическое присвоения автора'''
@@ -76,7 +80,7 @@ class PostCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
         return self.get_mixin_context(context, title='Добавить объявление')
 
 
-class PostUpdatePageView(LoginRequiredMixin, DataMixin, UpdateView):
+class PostUpdatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, UpdateView):
     '''редактирование объявления'''
 
     model = Post
@@ -84,18 +88,20 @@ class PostUpdatePageView(LoginRequiredMixin, DataMixin, UpdateView):
     template_name = 'ads/post/add_post.html'
     slug_field = 'post_slug'
     slug_url_kwarg = 'post_slug'
+    permission_required = ['ads.change_post', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Редактировать объявление')
 
 
-class UserPostPageView(LoginRequiredMixin, DataMixin, ListView):
+class UserPostPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, ListView):
     '''страница объявлений пользователя'''
 
     model = Post
     template_name = 'ads/post/user_post_page.html'
     context_object_name = 'posts'
+    permission_required = ['ads.change_post', ]
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
@@ -105,12 +111,13 @@ class UserPostPageView(LoginRequiredMixin, DataMixin, ListView):
         return self.get_mixin_context(context, title='Мои объявления')
 
 
-class PostFromCategoryPageView(DataMixin, ListView):
+class PostFromCategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
     '''страница объявлений по категориям'''
 
     model = Post
     template_name = 'ads/post/post_from_category_page.html'
     context_object_name = 'posts'
+    permission_required = ['ads.view_post', ]
 
     def get_queryset(self):
         self.category = Category.objects.get(category_slug=self.kwargs['category_slug'])
@@ -130,7 +137,7 @@ def close_post(request, post_slug):
     return redirect('ads:post_detail', post_slug=post_slug)
 
 
-class NewsDetailPageView(DataMixin, DetailView):
+class NewsDetailPageView(PermissionRequiredMixin, DataMixin, DetailView):
     '''страница конкретного поста'''
 
     model = News
@@ -138,18 +145,20 @@ class NewsDetailPageView(DataMixin, DetailView):
     slug_url_kwarg = 'news_slug'
     slug_field = 'news_slug'
     context_object_name = 'news'
+    permission_required = ['ads.view_news', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title=context['news'].title)
 
 
-class NewsCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
+class NewsCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     '''добавление новости'''
 
     model = News
     form_class = AddNewsForm
     template_name = 'ads/news/add_news.html'
+    permission_required = ['ads.create_news', ]
 
     def form_valid(self, form):
         '''автоматическое присвоение автора'''
@@ -163,13 +172,14 @@ class NewsCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
         return self.get_mixin_context(context, title='Добавить новость')
 
 
-class CommentCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
+class CommentCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     '''создание комментария к посту'''
 
     model = Comment
     form_class = CreateCommentForm
     template_name = 'ads/comment/add_comment.html'
     context_object_name = 'comment'
+    permission_required = ['ads.create_comment', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -184,12 +194,13 @@ class CommentCreatePageView(LoginRequiredMixin, DataMixin, CreateView):
         return redirect('ads:index')
 
 
-class UserIncomingCommentsPageView(LoginRequiredMixin, DataMixin, ListView):
+class UserIncomingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, ListView):
     '''страница входящих откликов'''
 
     model = Comment
     template_name = 'ads/comment/user_incoming_comment_page.html'
     context_object_name = 'comment'
+    permission_required = ['ads.view_comment', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -199,12 +210,13 @@ class UserIncomingCommentsPageView(LoginRequiredMixin, DataMixin, ListView):
         return Comment.objects.filter(destination_user=self.request.user)
 
 
-class UserOutgoingCommentsPageView(LoginRequiredMixin, DataMixin, ListView):
+class UserOutgoingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, ListView):
     '''страница исходящих откликов'''
 
     model = Comment
     template_name = 'ads/comment/user_outgoing_comment_page.html'
     context_object_name = 'comment'
+    permission_required = ['ads.view_comment', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -214,12 +226,13 @@ class UserOutgoingCommentsPageView(LoginRequiredMixin, DataMixin, ListView):
         return Comment.objects.filter(author=self.request.user).exclude(destination_user=self.request.user)
 
 
-class CommentDetailPageView(LoginRequiredMixin, DataMixin, DetailView):
+class CommentDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, DetailView):
     '''страница конкретного отклика'''
 
     model = Comment
     template_name = 'ads/comment/comment_detail_page.html'
     context_object_name = 'comment'
+    permission_required = ['ads.view_comment', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
