@@ -7,19 +7,21 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-from ads.models import User
+
 from ads.utils import DataMixin
 from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm, ConfirmEmailForm
+from .models import User
 
 
-class LoginUserView(LoginView):
+class LoginUserView(DataMixin, LoginView):
     '''вход в систему'''
 
     form_class = LoginUserForm
     template_name = 'users/login.html'
-    extra_context = {
-        'title': 'Login',
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Авторизация')
 
 
 class RegistrationUserView(DataMixin, CreateView):
@@ -54,7 +56,12 @@ class RegistrationUserView(DataMixin, CreateView):
 
 
 class ConfirmEmailView(DataMixin, UpdateView):
-    '''страница ввода и проверки токена'''
+    '''страница ввода и проверки токена, юзеру присваивается группа прав <default_user>.
+
+    чтобы все работало, в админ панели в разделе пользователей нужно создать 3 группы пользователей - admin(c id=1),
+    moderator(c id=2), default_user(c id=3). при регистрации пользователя он изначально наделяется правами группы default_user, который может
+    просматривать новости и объявления, оставлять и изменять свои объявления, отвечать на объявления. группе пользователей moderator доступны дополнительно
+    права на создание и редактирование новостей сайта news. пользователь admin наделен всеми доступными правами'''
 
     model = User
     form_class = ConfirmEmailForm
@@ -67,8 +74,8 @@ class ConfirmEmailView(DataMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         if 'token' in request.POST: # если токен есть в коллекции пост
             token = request.POST['token']
-            user = User.objects.filter(token=token) # ищу юзера по совпадению токена
-            user_for_group = User.objects.get(token=token) # получение конкретного юзера
+            user = User.objects.filter(token=token) # ищу всех юзеров по совпадению токена(он будет 1 в queryset, т.к. token обнуляется после регистрации)
+            user_for_group = User.objects.get(token=token) # полученаю по токену конкретного юзера (не queryset)
             if user.exists(): # если queryset содержит запись
                 user.update(is_active=True) # меняю статус на активный
                 user_for_group.groups.add(3) # при регистрации юзер автоматически получает группу "default_user"
@@ -82,7 +89,7 @@ class ConfirmEmailView(DataMixin, UpdateView):
 class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
     '''страница профиля пользователя, его можно редактировать'''
 
-    model = get_user_model()
+    model = User
     form_class = ProfileUserForm
     template_name = 'users/profile.html'
 

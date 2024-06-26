@@ -7,39 +7,36 @@ from .models import Post, News, Category, Comment
 from .utils import DataMixin
 
 
-class IndexPageView(PermissionRequiredMixin, DataMixin, ListView):
+class IndexPageView(DataMixin, ListView):
     '''главная страница с новостями платформы'''
 
     model = News
     template_name = 'ads/index.html'
     context_object_name = 'news'
-    permission_required = ['ads.view_news', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Главная страница')
 
 
-class CategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
+class CategoryPageView(DataMixin, ListView):
     '''страница всех категорий'''
 
     model = Category
     template_name = 'ads/category/category_page.html'
     context_object_name = 'categories'
-    permission_required = ['ads.view_category', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Классы')
 
 
-class AllPostPageView(PermissionRequiredMixin, DataMixin, ListView):
+class AllPostPageView(DataMixin, ListView):
     '''страница всех объявлений от свежих к старым'''
 
     model = Post
     template_name = 'ads/post/all_posts_page.html'
     context_object_name = 'posts'
-    permission_required = ['ads.view_post', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

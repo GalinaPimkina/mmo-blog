@@ -3,21 +3,16 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
 
-
-class User(AbstractUser):
-    nickname = models.CharField(max_length=50, verbose_name="Никнейм")
-    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", default=None, blank=True, null=True, verbose_name="Аватар")
-    token = models.CharField(max_length=6, null=True, blank=True, verbose_name='Токен')
-
-    def __str__(self):
-        return self.username
+from users.models import User
 
 
 class Post(models.Model):
+    '''модель объявлений для поиска других авантюристов'''
+
     title = models.CharField(max_length=100, verbose_name="Заголовок")
     content = models.TextField(verbose_name='Текст') # д/б текст, картинки, видео и тд
     category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="post", verbose_name="Класс")
-    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='удален', related_name="post", verbose_name="Автор поста")
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="post", verbose_name="Автор поста")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
     post_slug = AutoSlugField(populate_from='title', db_index=True, unique=True, verbose_name='URL')
@@ -29,20 +24,33 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('ads:post_detail', kwargs={'post_slug': self.post_slug})
 
+    class Meta:
+        ordering = ['-time_create']
+        verbose_name = "Объявление"
+        verbose_name_plural = "Объявления"
+
 
 class Category(models.Model):
+    '''модель классов авантюристов'''
+
     name = models.CharField(max_length=50, verbose_name="Класс")
     category_slug = AutoSlugField(populate_from='name', db_index=True, unique=True, verbose_name='URL')
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Класс"
+        verbose_name_plural = "Классы"
+
 
 class Comment(models.Model):
+    '''модель откликов авантюристов'''
+
     content = models.TextField(verbose_name='Текст')
     destination_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="comment", verbose_name="Отклик кому")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comment", verbose_name="К посту")
-    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='удален', related_name="author_of_comment", verbose_name="Автор отклика")
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="author_of_comment", verbose_name="Автор отклика")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
     received = models.BooleanField(default=False, verbose_name="Принят") # показывает, принят отклик или нет
@@ -55,11 +63,18 @@ class Comment(models.Model):
     def get_success_url(self):
         return reverse('ads:comment_detail', kwargs={'pk': self.pk})
 
+    class Meta:
+        ordering = ['-time_create']
+        verbose_name = "Отклик"
+        verbose_name_plural = "Отклики"
+
 
 class News(models.Model):
+    '''модель новостей сайта, отображается на главной странице index'''
+
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     content = models.TextField(verbose_name="Текст") # д.б текст картинки видео и тд
-    author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='удален', related_name="news", verbose_name="Автор новости")
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="news", verbose_name="Автор новости")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
     news_slug = AutoSlugField(populate_from='title', db_index=True, unique=True, verbose_name='URL')
@@ -69,3 +84,8 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return reverse('ads:news_detail', kwargs={'news_slug': self.news_slug})
+
+    class Meta:
+        ordering = ['-time_create']
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"

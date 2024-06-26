@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -128,7 +128,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "ads.User" # расширенная модель юзера
+AUTH_USER_MODEL = "users.User" # расширенная модель юзера
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -137,4 +137,4 @@ LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'ads:index'
 LOGOUT_REDIRECT_URL = 'ads:index'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #для упроценной проверки рассылок делаю их в консоль

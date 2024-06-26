@@ -13,25 +13,53 @@
         <nav>
             <ul>
                 <li class="menu">
-                    <a href="{% url 'ads:index' %}">Главная страница</a>
-                    <a href="{% url 'ads:all_posts' %}">Все объявления</a>
-                    <a href="{% url 'ads:categories' %}">Объявления по классам</a>
+                    {% for m in mainmenu %} <!--меню,которое видно всем-->
+                        <a href="{% url m.url_name %}">{{ m.title }}</a>
+                    {% endfor %}
                 </li>
-                {% if user.is_authenticated %}
+
+                {% if user.is_authenticated %}<!--меню,которое видно только авторизованным пользователям-->
                     <li class="menu">
-                        <a href="{% url 'ads:add_news' %}">Добавить новость</a>
-                        <a href="{% url 'ads:add_post' %}">Создать заявку</a>
+                        {% for a in auth_menu %}
+                            <a href="{% url a.url_name %}">{{ a.title }}</a>
+                        {% endfor %}
                     </li>
                     <li class="last">
-                        <a href="{% url 'ads:user_post_page' %}">Мои объявления</a>
-                        <a href="{% url 'ads:comments_incoming' %}">Входящие отклики</a>
-                        <a href="{% url 'ads:comments_outgoing' %}">Мои отклики</a>
-                        <a href="{% url 'users:profile' user.pk %}">{{ user.username }}</a>
-                        <a href="{% url 'users:logout' %}">Выйти</a>
+                        <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
+                        {% for l in logout_menu %}
+                            <a href="{% url l.url_name %}">{{ l.title }}</a>
+                        {% endfor %}
                     </li>
-                {% else %}
-                    <li class="last"><a href="{% url 'users:login' %}">Войти</a>  <a href="{% url 'users:registration' %}">Регистрация</a></li>
+                {% else %}<!--меню,которое видно неавторизованным пользователям-->
+                    <li class="last">
+                        {% for l in login_signup_menu %}
+                            <a href="{% url l.url_name %}">{{ l.title }}</a>
+                        {% endfor %}
+                    </li>
                 {% endif %}
+
+
+
+<!--                <li class="menu">-->
+<!--                    <a href="{% url 'ads:index' %}">Главная страница</a>-->
+<!--                    <a href="{% url 'ads:all_posts' %}">Все объявления</a>-->
+<!--                    <a href="{% url 'ads:categories' %}">Объявления по классам</a>-->
+<!--                </li>-->
+<!--                {% if user.is_authenticated %}-->
+<!--                    <li class="menu">-->
+<!--                        <a href="{% url 'ads:add_news' %}">Добавить новость</a>-->
+<!--                        <a href="{% url 'ads:add_post' %}">Создать заявку</a>-->
+<!--                    </li>-->
+<!--                    <li class="last">-->
+<!--                        <a href="{% url 'ads:user_post_page' %}">Мои объявления</a>-->
+<!--                        <a href="{% url 'ads:comments_incoming' %}">Входящие отклики</a>-->
+<!--                        <a href="{% url 'ads:comments_outgoing' %}">Мои отклики</a>-->
+<!--                        <a href="{% url 'users:profile' user.pk %}">{{ user.username }}</a>-->
+<!--                        <a href="{% url 'users:logout' %}">Выйти</a>-->
+<!--                    </li>-->
+<!--                {% else %}-->
+<!--                    <li class="last"><a href="{% url 'users:login' %}">Войти</a>  <a href="{% url 'users:registration' %}">Регистрация</a></li>-->
+<!--                {% endif %}-->
             </ul>
         </nav>
     {% endblock menu %}
