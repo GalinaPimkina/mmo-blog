@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
+from .filters import PostFilter
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
 from .models import Post, News, Category, Comment
 from .utils import DataMixin
@@ -40,9 +41,16 @@ class AllPostPageView(DataMixin, ListView):
     context_object_name = 'posts'
     paginate_by = 3
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Все объявления')
+        return self.get_mixin_context(context,
+                                      title='Все объявления',
+                                      filterset=self.filterset)
 
 
 class PostDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, DetailView):

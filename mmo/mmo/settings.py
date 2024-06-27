@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ads.apps.AdsConfig',
     'users.apps.UsersConfig',
-    'django.contrib.sites'
+    'django.contrib.sites',
+    'django_filters',
 ]
 
 SITE_ID = 1
