@@ -3,14 +3,16 @@
 {% block content %}
     {% if news %}
         {% for n in news %}
-            <ul>
-                <li>
-                    <p><h3>{{ n.title }}</h3></p>
+            <div>
+                <div>
+                    <p><h3>{{ n.title }} | От: {{ n.time_create }}</h3></p>
                     <p>{{ n.content|truncatewords:20 }}</p>
-                </li>
-            </ul>
+                </div>
+            </div>
         {% endfor %}
     {% else %}
-        <p>Записи отсутствуют.</p>
+        <div>
+            <p>Записи отсутствуют.</p>
+        </div>
     {% endif %}
 {% endblock content %}

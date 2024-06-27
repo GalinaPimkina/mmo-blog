@@ -13,6 +13,7 @@ class IndexPageView(DataMixin, ListView):
     model = News
     template_name = 'ads/index.html'
     context_object_name = 'news'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,6 +38,7 @@ class AllPostPageView(DataMixin, ListView):
     model = Post
     template_name = 'ads/post/all_posts_page.html'
     context_object_name = 'posts'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -99,6 +101,7 @@ class UserPostPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, L
     template_name = 'ads/post/user_post_page.html'
     context_object_name = 'posts'
     permission_required = ['ads.change_post', ]
+    paginate_by = 3
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
@@ -115,6 +118,7 @@ class PostFromCategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
     template_name = 'ads/post/post_from_category_page.html'
     context_object_name = 'posts'
     permission_required = ['ads.view_post', ]
+    paginate_by = 3
 
     def get_queryset(self):
         self.category = Category.objects.get(category_slug=self.kwargs['category_slug'])
@@ -198,6 +202,7 @@ class UserIncomingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
     template_name = 'ads/comment/user_incoming_comment_page.html'
     context_object_name = 'comment'
     permission_required = ['ads.view_comment', ]
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -214,6 +219,7 @@ class UserOutgoingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
     template_name = 'ads/comment/user_outgoing_comment_page.html'
     context_object_name = 'comment'
     permission_required = ['ads.view_comment', ]
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

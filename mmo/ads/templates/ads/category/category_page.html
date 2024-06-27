@@ -7,6 +7,10 @@
             <p><a href="{% url 'ads:post_from_category' cat.category_slug %}">{{ cat.name }}</a></p>
         {% endfor %}
     {% else %}<!--если пустой queryset-->
-        <p>Записи отсутствуют.</p>
+        <div>
+            <div>
+                <p>Записи отсутствуют.</p>
+            </div>
+        </div>
     {% endif %}
 {% endblock content %}

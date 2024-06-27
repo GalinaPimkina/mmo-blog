@@ -17,6 +17,8 @@
             <hr>
         {% endfor %}
     {% else %}<!--если пустой queryset-->
-        <p>Записи отсутствуют.</p>
+        <div>
+            <p>Записи отсутствуют.</p>
+        </div>
     {% endif %}
 {% endblock content %}
