@@ -8,7 +8,7 @@ class User(AbstractUser):
     token = models.CharField(max_length=6, null=True, blank=True, verbose_name='Токен')
 
     def __str__(self):
-        return self.username
+        return self.nickname
 
     class Meta:
         verbose_name = "Авантюрист"

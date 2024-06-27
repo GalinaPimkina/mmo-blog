@@ -18,13 +18,14 @@ class RegistrationUserForm(UserCreationForm):
     '''форма регистрации'''
 
     username = forms.CharField(label='Логин')
+    nickname = forms.CharField(label='Никнейм')
     password1 = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
     password2 = forms.CharField(widget=forms.PasswordInput(), label='Повтор пароля')
     email = forms.EmailField(label='E-mail')
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'nickname', 'email', 'password1', 'password2']
 
     def clean_email(self):
         '''проверка уникальности email при регистрации'''

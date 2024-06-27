@@ -13,19 +13,19 @@
         <nav>
             <ul>
                 <li class="menu">
-                    {% for m in mainmenu %} <!--меню,которое видно всем-->
+                    {% for m in mainmenu %} <!--меню,которое видно всем  / в файле ads/utils.py-->
                         <a href="{% url m.url_name %}">{{ m.title }}</a>
                     {% endfor %}
                 </li>
 
-                {% if user.is_authenticated %}<!--меню,которое видно только авторизованным пользователям-->
+                {% if user.is_authenticated and user.is_active %}<!--меню,которое видно только авторизованным пользователям-->
                     <li class="menu">
                         {% for a in auth_menu %}
                             <a href="{% url a.url_name %}">{{ a.title }}</a>
                         {% endfor %}
                     </li>
                     <li class="last">
-                        <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
+                        <a href="{% url 'users:profile' user.id %}">{{ user.nickname }}</a>
                         {% for l in logout_menu %}
                             <a href="{% url l.url_name %}">{{ l.title }}</a>
                         {% endfor %}

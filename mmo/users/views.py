@@ -39,8 +39,7 @@ class RegistrationUserView(DataMixin, CreateView):
         '''присвоение юзеру токена и отправка на почту'''
 
         user = form.save(commit=False)
-        token = random.randint(100000, 999999)
-        user.token = token
+        user.token = random.randint(100000, 999999)
         user.is_active = False
         user.save()
 
