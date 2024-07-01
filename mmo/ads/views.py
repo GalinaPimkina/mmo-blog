@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from .filters import PostFilter
+from .filters import PostFilter, CommentFilter
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
 from .models import Post, News, Category, Comment
 from .utils import DataMixin
@@ -73,7 +73,7 @@ class PostCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin,
 
     form_class = AddPostForm
     template_name = 'ads/post/add_post.html'
-    permission_required = ['ads.create_post', ]
+    permission_required = ['ads.add_post', ]
 
     def form_valid(self, form):
         '''автоматическое присвоения автора'''
@@ -167,7 +167,7 @@ class NewsCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin,
     model = News
     form_class = AddNewsForm
     template_name = 'ads/news/add_news.html'
-    permission_required = ['ads.create_news', ]
+    permission_required = ['ads.add_news', ]
 
     def form_valid(self, form):
         '''автоматическое присвоение автора'''
@@ -188,7 +188,7 @@ class CommentCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMix
     form_class = CreateCommentForm
     template_name = 'ads/comment/add_comment.html'
     context_object_name = 'comment'
-    permission_required = ['ads.create_comment', ]
+    permission_required = ['ads.add_comment', ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -214,10 +214,14 @@ class UserIncomingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Входящие отклики')
+        return self.get_mixin_context(context,
+                                      title='Входящие отклики',
+                                      filterset=self.filterset)
 
     def get_queryset(self):
-        return Comment.objects.filter(destination_user=self.request.user)
+        queryset = Comment.objects.filter(destination_user=self.request.user)
+        self.filterset = CommentFilter(self.request.GET, queryset)
+        return self.filterset.qs
 
 
 class UserOutgoingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, ListView):
@@ -231,10 +235,14 @@ class UserOutgoingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Исходящие отклики')
+        return self.get_mixin_context(context,
+                                      title='Исходящие отклики',
+                                      filterset=self.filterset)
 
     def get_queryset(self):
-        return Comment.objects.filter(author=self.request.user).exclude(destination_user=self.request.user)
+        queryset = Comment.objects.filter(author=self.request.user).exclude(destination_user=self.request.user)
+        self.filterset = CommentFilter(self.request.GET, queryset)
+        return self.filterset.qs
 
 
 class CommentDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, DetailView):
