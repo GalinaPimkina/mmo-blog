@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block content %}
+{% include 'ads/filter_form.html' %} <!--включаю шаблон с формой для фильтрации-->
     {% if comment %}<!--если есть-->
         {% for c in comment %}
         <p>Отклик к объявлению: {{ c.post.title }} | Отправлен: {{ c.time_create }} | Авантюристу: {{ c.post.author }}</p>
+        <p>{{ c.content|truncatewords:3 }}</p>
         <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
         {% if c.processed %}<!--если отклик ОБРАБОТАН-->
             {% if comment.received == True %}<!--если принят-->
