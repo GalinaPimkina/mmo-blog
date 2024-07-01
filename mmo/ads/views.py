@@ -203,6 +203,20 @@ class CommentCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMix
         return redirect('ads:index')
 
 
+class CommentUpdatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, UpdateView):
+    '''редактирование отклика'''
+
+    model = Comment
+    form_class = CreateCommentForm
+    template_name = 'ads/comment/add_comment.html'
+    context_object_name = 'comment'
+    permission_required = ['ads.change_comment', ]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Редактировать отклик',)
+
+
 class UserIncomingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, ListView):
     '''страница входящих откликов'''
 

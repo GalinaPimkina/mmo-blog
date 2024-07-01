@@ -23,6 +23,7 @@ urlpatterns = [
     path('post/<str:post_slug>/add_comment/', views.CommentCreatePageView.as_view(), name='add_comment'),#добавить комментарий
 
     path('comment/<int:pk>/', views.CommentDetailPageView.as_view(), name='comment_detail'),#страница выбранного комментария
+    path('comment/<int:pk>/edit/', views.CommentUpdatePageView.as_view(), name='edit_comment'),#редактировать отклик
     path('comments/incoming/', views.UserIncomingCommentsPageView.as_view(), name='comments_incoming'),#страница с входящими откликами пользователя
     path('comments/outgoing/', views.UserOutgoingCommentsPageView.as_view(), name='comments_outgoing'),#страница с исходящими откликами пользователя
 

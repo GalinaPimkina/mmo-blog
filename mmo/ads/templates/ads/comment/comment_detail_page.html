@@ -14,6 +14,7 @@
     {% if comment.processed == False %} <!--если отклик НЕ ОБРАБОТАН-->
         {% if user == comment.author %} <!--если юзер - это автор отклика-->
             <p>Ожидает рассмотрения</p>
+            <a href="{% url 'ads:edit_comment' comment.id %}">Редактировать отклик</a>
         {% else %}<!--если юзер НЕ является автором отклика-->
             <a href="{% url 'ads:comment_receive' comment.pk %}">Принять</a> <a href="{% url 'ads:comment_rejected' comment.pk %}">Отклонить</a>
         {% endif %}
