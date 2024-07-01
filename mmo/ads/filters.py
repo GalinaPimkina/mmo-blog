@@ -1,6 +1,6 @@
 from django_filters import FilterSet
 
-from ads.models import Post
+from ads.models import Post, Comment
 
 
 class PostFilter(FilterSet):
@@ -8,5 +8,13 @@ class PostFilter(FilterSet):
         model = Post
         fields = {
             'title': ['icontains'],
+            'content': ['icontains'],
+        }
+
+
+class CommentFilter(FilterSet):
+    class Meta:
+        model = Comment
+        fields = {
             'content': ['icontains'],
         }
