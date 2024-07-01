@@ -3,12 +3,14 @@
 {% block content %}
     {% if news %}
         {% for n in news %}
-            <div>
-                <div>
-                    <p><h3>{{ n.title }} | От: {{ n.time_create }}</h3></p>
+            <div class="post-background">
+                <div class="content">
+                    <div class="title">
+                        <p>{{ n.title }} | От: {{ n.time_create }}</p>
+                    </div>
+
                     <p>{{ n.content|truncatewords:20 }}</p>
                     <a href="{% url 'ads:news_detail' n.news_slug %}">Подробнее...</a>
-                    <hr>
                 </div>
             </div>
         {% endfor %}

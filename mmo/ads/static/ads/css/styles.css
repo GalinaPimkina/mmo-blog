@@ -1,17 +1,48 @@
-ul {
-  list-style: none;
-  margin: 10px;
-  padding-left: 10px;
+body {
+    background-color: #DCDCDC;
 }
+
 a {
     text-decoration: none;
 }
 
-li.menu {
+.header {
+  list-style: none;
+  padding: 10px;
+  height: 30px;
+  background: #FDF5E6;
+}
+
+.header a {
+    padding: 10px;
+}
+
+.menu {
     display: inline;
     padding: 10px;
 }
 
 .last {
     float: right;
+    margin: 0px;
+}
+
+.post-background {
+    width: 100%;
+    background: #FDF5E6;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.content p, a{
+    padding: 5px 20px;
+    margin: 10px;
+}
+
+.pagination {
+    padding: 5px 20px;
+    margin: 10px;
 }

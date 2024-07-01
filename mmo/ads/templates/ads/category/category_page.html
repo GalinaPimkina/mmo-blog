@@ -3,14 +3,12 @@
 
 {% block content %}
     {% if categories %}<!--если есть-->
+        <div class="post-background">
         {% for cat in categories %}
             <p><a href="{% url 'ads:post_from_category' cat.category_slug %}">{{ cat.name }}</a></p>
         {% endfor %}
     {% else %}<!--если пустой queryset-->
-        <div>
-            <div>
-                <p>Записи отсутствуют.</p>
-            </div>
+            <p>Записи отсутствуют.</p>
         </div>
     {% endif %}
 {% endblock content %}

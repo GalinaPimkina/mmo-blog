@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="post-background">
     <p>Вы ввели неверный код активации.</p>
     <p>Ввести код <a href="{% url 'users:confirm_email' pk %}">повторно</a>.</p>
+</div>
 {% endblock content %}

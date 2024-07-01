@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  <p>На ваш почтовый ящик отправлен код подтверждения. Введите его в поле ниже.</p>
-    <input class="text" type="text" name="token" placeholder="Код активации: ">
-    <input type="submit" value="Отправить">
-</form>
+<div class="post-background">
+  <form method="post">
+    {% csrf_token %}
+    <p>На ваш почтовый ящик отправлен код подтверждения. Введите его в поле ниже.</p>
+      <input class="text" type="text" name="token" placeholder="Код активации: ">
+      <input type="submit" value="Отправить">
+  </form>
+</div>
 {% endblock content %}

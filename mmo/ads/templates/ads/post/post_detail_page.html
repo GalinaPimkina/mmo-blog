@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
-    <p>{{ post.content }}</p>
-    <hr>
-    <div>
-        {% if user == post.author %} <!--если юзер - это автор объявления-->
-            {% if post.closed %}<!--если объявление закрыто-->
-                <p>Объявление закрыто</p>
-            {% else %}<!--если объявление НЕ закрыто-->
-                <p><a href="{% url 'ads:close_post' post.post_slug %}">Закрыть объявление</a></p>
-                <p><a href="{% url 'ads:edit_post' post.post_slug %}">Редактировать объявление</a></p>
+    <div class="post-background">
+        <div class="title">
+            <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
+        </div>
+
+        <p>{{ post.content }}</p>
+        <hr>
+        <div>
+            {% if user == post.author %} <!--если юзер - это автор объявления-->
+                {% if post.closed %}<!--если объявление закрыто-->
+                    <p>Объявление закрыто</p>
+                {% else %}<!--если объявление НЕ закрыто-->
+                    <p><a href="{% url 'ads:close_post' post.post_slug %}">Закрыть объявление</a></p>
+                    <p><a href="{% url 'ads:edit_post' post.post_slug %}">Редактировать объявление</a></p>
+                {% endif %}
+            {% else %} <!--если юзер не автор объявления -->
+                <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
             {% endif %}
-        {% else %} <!--если юзер не автор объявления -->
-            <p><a href="{% url 'ads:add_comment' post.post_slug %}">Откликнуться</a></p>
-        {% endif %}
+        </div>
     </div>
 {% endblock content %}

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>{{ news.title }} | Создан: {{ news.time_create }} | Автор: {{ news.author }}</p>
+<div class="post-background">
+    <div class="title">
+        <p>{{ news.title }} | От: {{ news.time_create }} | Автор: {{ news.author }}</p>
+    </div>
     <p>{{ news.content }}</p>
+</div>
 {% endblock content %}

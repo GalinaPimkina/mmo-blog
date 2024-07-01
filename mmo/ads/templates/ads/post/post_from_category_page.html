@@ -3,15 +3,18 @@
 {% block content %}
     {% if posts %}<!--если есть-->
         {% for p in posts %}
-            <ul>
-                <li>
-                    <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+            <div class="post-background">
+                <div class="content">
+                    <div class="title">
+                        <p>{{ p.title }} | Авантюрист: {{ p.author }} | Создан: {{ p.time_create }}</p>
+                    </div>
+
                     <p><a href="{{ p.get_absolute_url }}">Подробнее...</a></p>
                     {% if p.closed %}<!--если объявление закрыто-->
                         <p>Объявление закрыто</p>
                     {% endif %}
-                </li>
-            </ul>
+                </div>
+            </div>
         {% endfor %}
     {% else %}<!--если пустой queryset-->
         <div>

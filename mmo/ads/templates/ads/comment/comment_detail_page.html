@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <h3>{{ comment.post.title }}</h3>
+<div class="post-background">
+    <div class="title">
+        <p>{{ comment.post.title }}</p>
+    </div>
+
     <p>{{ comment.post.content }}</p>
     <hr>
     <p>От: {{ comment.author }} | Отправлен: {{ comment.time_create }}</p>
@@ -20,4 +24,5 @@
             <p>Отклонено</p>
         {% endif %}
     {% endif %}
+</div>
 {% endblock content %}

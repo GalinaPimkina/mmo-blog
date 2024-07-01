@@ -8,47 +8,57 @@
     <link type="text/css" href="{% static 'ads/css/styles.css' %}" rel="stylesheet" />
 </head>
 <body>
-<nav role="navigation">
-    {% block menu %}
-        <nav>
-            <ul>
-                <li class="menu">
-                    {% for m in mainmenu %} <!--меню,которое видно всем  / в файле ads/utils.py-->
-                        <a href="{% url m.url_name %}">{{ m.title }}</a>
-                    {% endfor %}
-                </li>
+<div>
+{% block menu %}
+    <div class="header">
+        <div class="menu"><!--для всех юзеров-->
+            <a href="{% url 'ads:index' %}">Главная страница</a>
+            <a href="{% url 'ads:all_posts' %}">Все объявления</a>
+            <a href="{% url 'ads:categories' %}">Объявления по классам</a>
+        </div>
 
-                {% if user.is_authenticated and user.is_active %}<!--меню,которое видно только авторизованным пользователям-->
-                    <li class="menu">
-                        {% for a in auth_menu %}
-                            <a href="{% url a.url_name %}">{{ a.title }}</a>
-                        {% endfor %}
-                    </li>
-                    <li class="last">
-                        <a href="{% url 'users:profile' user.id %}">{{ user.nickname }}</a>
-                        {% for l in logout_menu %}
-                            <a href="{% url l.url_name %}">{{ l.title }}</a>
-                        {% endfor %}
-                    </li>
-                {% else %}<!--меню,которое видно неавторизованным пользователям-->
-                    <li class="last">
-                        {% for l in login_signup_menu %}
-                            <a href="{% url l.url_name %}">{{ l.title }}</a>
-                        {% endfor %}
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endblock menu %}
-</nav>
+        {% if user.is_authenticated and user.is_active %}<!--если юзер авторизован-->
+            {% if user.is_admin or user.is_staff %}<!--если юзер - админ или staff-->
+                <div class="menu">
+                    <a href="{% url 'ads:add_news' %}">Добавить новость</a>
+                </div>
+            {% endif %}
+
+            <div class="menu"><!--если юзер простой пользователь-->
+                <a href="{% url 'ads:add_post' %}">Создать заявку</a>
+                <a href="{% url 'ads:user_post_page' %}">Мои объявления</a>
+                <a href="{% url 'ads:comments_incoming' %}">Входящие отклики</a>
+                <a href="{% url 'ads:comments_outgoing' %}">Мои отклики</a>
+            </div>
+
+            <div class="last">
+                <a href="{% url 'users:profile' user.id %}">{{ user.nickname }}</a>
+                <a href="{% url 'users:logout' %}">Выйти</a>
+            </div>
+
+        {% else %}<!--если юзер не авторизован-->
+            <div class="last">
+                <a href="{% url 'users:login' %}">Войти</a>
+                <a href="{% url 'users:registration' %}">Регистрация</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock menu %}
+
 <div>
     {% block breadcrumbs %}
     {% endblock breadcrumbs %}
 </div>
-<div>
-    {% block content %}
-    {% endblock content %}
+<div class="content">
+    <div>
+        {% block content %}
+        {% endblock content %}
+    </div>
 </div>
+
+<div align="center" class="pagination">
     {% include 'ads/pagination.html' %}
+</div>
+</div>
 </body>
 </html>

@@ -5,20 +5,26 @@
 {% include 'ads/filter_form.html' %} <!--включаю шаблон с формой для фильтрации-->
     {% if comment %}<!--если есть-->
         {% for c in comment %}
-        <p>Отклик к объявлению: {{ c.post.title }} | Отправлен: {{ c.time_create }} | Авантюристу: {{ c.post.author }}</p>
-        <p>{{ c.content|truncatewords:3 }}</p>
-        <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
-        {% if c.processed %}<!--если отклик ОБРАБОТАН-->
-            {% if comment.received == True %}<!--если принят-->
-                <p>Принято</p>
-            {% else %}<!--если отклонен-->
-                <p>Отклонено</p>
-            {% endif %}
-        {% else %}<!--если отклик НЕ ОБРАБОТАН-->
-            <p>Ждет рассмотрения</p>
-        {% endif %}
-        <hr>
+            <div class="post-background">
+                <div class="content">
+                    <div class="title">
+                        <p>Отклик к объявлению: {{ c.post.title }} | Отправлен: {{ c.time_create }} | Авантюристу: {{ c.post.author }}</p>
+                    </div>
+                    <p>{{ c.content|truncatewords:3 }}</p>
+                    <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
+                    {% if c.processed %}<!--если отклик ОБРАБОТАН-->
+                        {% if comment.received == True %}<!--если принят-->
+                            <p>Принято</p>
+                        {% else %}<!--если отклонен-->
+                            <p>Отклонено</p>
+                        {% endif %}
+                    {% else %}<!--если отклик НЕ ОБРАБОТАН-->
+                        <p>Ждет рассмотрения</p>
+                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
+
     {% else %}<!--если пустой queryset-->
         <div>
             <p>Записи отсутствуют.</p>
