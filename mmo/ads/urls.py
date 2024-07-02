@@ -12,6 +12,9 @@ urlpatterns = [
 
     path('categories/', views.CategoryPageView.as_view(), name='categories'),#страница категорий
 
+    path('categories/<slug:category_slug>/subscribe/', views.subscribe, name='subscribe'), #подписка на категорию
+    path('categories/<slug:category_slug>/unsubscribe/', views.unsubscribe, name='unsubscribe'),#отписка от категории
+
     path('posts/', views.AllPostPageView.as_view(), name='all_posts'),#страница со всеми объявлениями о поиске
     path('posts/category/<str:category_slug>/', views.PostFromCategoryPageView.as_view(), name='post_from_category'), #страница объявлений по категориям
     path('posts/user/', views.UserPostPageView.as_view(), name='user_post_page'),#страница объявлений конкретного юзера

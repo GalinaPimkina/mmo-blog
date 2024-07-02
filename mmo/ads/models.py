@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
@@ -89,3 +88,10 @@ class News(models.Model):
         ordering = ['-time_create']
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+
+
+class Subscriber(models.Model):
+    '''модель подписки юзера на категории'''
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscribe", verbose_name="Юзер")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="subscribe", verbose_name="Категория")

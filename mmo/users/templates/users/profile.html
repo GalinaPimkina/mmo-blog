@@ -2,13 +2,23 @@
 
 {% block content %}
 <div class="post-background" align="center">
-    {% if profile.avatar %}
+
+    {% if profile.avatar %}<!--если есть аватарка-->
         <img src="{{ profile.avatar.url }}" alt="Аватар" width="200">
     {% endif %}
+
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}">
       {{ form.as_p }}
+
+        {% if subs %}<!--если подписки есть-->
+        Подписка на обновления в категориях:
+            {% for s in subs %}
+            <p>{{ s.category }}<a href="{% url 'ads:unsubscribe' s.category.category_slug %}">Отписаться</a></p>
+            {% endfor %}
+        {% endif %}
+
       <p><button type="submit">Сохранить изменения</button></p>
     </form>
 </div>

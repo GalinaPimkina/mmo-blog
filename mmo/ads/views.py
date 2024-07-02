@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .filters import PostFilter, CommentFilter
 from .forms import AddPostForm, AddNewsForm, CreateCommentForm
-from .models import Post, News, Category, Comment
+from .models import Post, News, Category, Comment, Subscriber
 from .utils import DataMixin
 
 
@@ -130,11 +130,15 @@ class PostFromCategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
 
     def get_queryset(self):
         self.category = Category.objects.get(category_slug=self.kwargs['category_slug'])
+        self.subs = Subscriber.objects.filter(category__category_slug=self.kwargs['category_slug'])
         return Post.objects.filter(category=self.category)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=f"Объявления по классу: {self.category}")
+        return self.get_mixin_context(context,
+                                      title=f"Объявления по классу: {self.category}",
+                                      category=self.category,
+                                      subs=self.subs)
 
 
 def close_post(request, post_slug):
@@ -294,3 +298,21 @@ def comment_rejected(request, pk):
     comment.processed = True
     comment.save()
     return redirect('ads:comment_detail', pk=pk)
+
+
+def subscribe(request, category_slug):
+    '''подписка на категории. подписаться можно на странице объявлений по нужной категории'''
+
+    user = request.user
+    category = Category.objects.get(category_slug=category_slug)
+    Subscriber.objects.create(user=user, category=category)
+    return redirect('ads:post_from_category', category_slug=category_slug)
+
+
+def unsubscribe(request, category_slug):
+    '''отписаться от категории. выполняется из профиля пользователя'''
+
+    user = request.user
+    category = Category.objects.get(category_slug=category_slug)
+    Subscriber.objects.filter(user=user, category=category).delete()
+    return redirect('users:profile', pk=user.pk)

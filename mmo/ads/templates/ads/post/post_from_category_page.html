@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+
+{% block breadcrumbs %}
+    {% if subs %} <!--если юзер подписан на категорию-->
+        <p>Вы подписаны на обновления в категории: {{ category }}
+    {% else %} <!--если не подписан -->
+        <p>Подписаться на обновления в категории: {{ category }}<a href="{% url 'ads:subscribe' category.category_slug %}">Подписаться</a></p>
+    {% endif %}
+{% endblock breadcrumbs %}
+
 {% block content %}
     {% if posts %}<!--если есть-->
         {% for p in posts %}

@@ -1,6 +1,5 @@
 import random
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
@@ -8,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
+from ads.models import Subscriber
 from ads.utils import DataMixin
 from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm, ConfirmEmailForm
 from .models import User
@@ -95,7 +95,9 @@ class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=f'Профиль пользователя {self.request.user.nickname}')
+        return self.get_mixin_context(context,
+                                      title=f'Профиль пользователя {self.request.user.nickname}',
+                                      subs=Subscriber.objects.filter(user=self.request.user))
 
     def get_success_url(self):
         return reverse_lazy('users:profile', args=[self.request.user.pk])
