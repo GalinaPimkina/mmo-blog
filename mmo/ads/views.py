@@ -41,6 +41,9 @@ class AllPostPageView(DataMixin, ListView):
     context_object_name = 'posts'
     paginate_by = 3
 
+    def get_queryset(self):
+        return Post.objects.select_related('author')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Все объявления')
@@ -56,9 +59,12 @@ class PostDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin,
     context_object_name = 'post'
     permission_required = ['ads.view_post', ]
 
+    def get_queryset(self):
+        return Post.objects.select_related('author')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=context['post'].title)
+        return self.get_mixin_context(context, title=context['post'].title, )
 
 
 class PostCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
@@ -124,7 +130,7 @@ class PostFromCategoryPageView(PermissionRequiredMixin, DataMixin, ListView):
     def get_queryset(self):
         self.category = Category.objects.get(category_slug=self.kwargs['category_slug'])
         self.subs = Subscriber.objects.filter(category__category_slug=self.kwargs['category_slug'])
-        return Post.objects.filter(category=self.category)
+        return Post.objects.filter(category=self.category).select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -230,7 +236,7 @@ class UserIncomingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
                                       filterset=self.filterset)
 
     def get_queryset(self):
-        queryset = Comment.objects.filter(destination_user=self.request.user)
+        queryset = Comment.objects.filter(destination_user=self.request.user).select_related('author', 'post')
         self.filterset = CommentFilter(self.request.GET, queryset)
         return self.filterset.qs
 
@@ -251,7 +257,7 @@ class UserOutgoingCommentsPageView(PermissionRequiredMixin, LoginRequiredMixin, 
                                       filterset=self.filterset)
 
     def get_queryset(self):
-        queryset = Comment.objects.filter(author=self.request.user).exclude(destination_user=self.request.user)
+        queryset = Comment.objects.filter(author=self.request.user).exclude(destination_user=self.request.user).select_related('author', 'post')
         self.filterset = CommentFilter(self.request.GET, queryset)
         return self.filterset.qs
 
@@ -263,6 +269,9 @@ class CommentDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMix
     template_name = 'ads/comment/comment_detail_page.html'
     context_object_name = 'comment'
     permission_required = ['ads.view_comment', ]
+
+    def get_queryset(self):
+        return Comment.objects.select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
