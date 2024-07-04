@@ -9,7 +9,7 @@
                         <p>{{ n.title }} | От: {{ n.time_create }}</p>
                     </div>
 
-                    <p>{{ n.content|truncatewords:20 }}</p>
+                    <p>{{ n.content|safe }}</p>
                     <a href="{% url 'ads:news_detail' n.news_slug %}">Подробнее...</a>
                 </div>
             </div>

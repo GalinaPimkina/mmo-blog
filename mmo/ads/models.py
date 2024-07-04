@@ -1,6 +1,7 @@
 from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
+from django_ckeditor_5.fields import CKEditor5Field
 
 from users.models import User
 
@@ -9,7 +10,7 @@ class Post(models.Model):
     '''модель объявлений для поиска других авантюристов'''
 
     title = models.CharField(max_length=100, verbose_name="Заголовок")
-    content = models.TextField(verbose_name='Текст') # д/б текст, картинки, видео и тд
+    content = CKEditor5Field(verbose_name='Контент', config_name='extends')
     category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="post", verbose_name="Класс")
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="post", verbose_name="Автор поста")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
@@ -72,7 +73,7 @@ class News(models.Model):
     '''модель новостей сайта, отображается на главной странице index'''
 
     title = models.CharField(max_length=255, verbose_name='Заголовок')
-    content = models.TextField(verbose_name="Текст") # д.б текст картинки видео и тд
+    content = CKEditor5Field(verbose_name='Контент', config_name='extends')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="news", verbose_name="Автор новости")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")

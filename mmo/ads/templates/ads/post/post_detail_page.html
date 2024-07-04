@@ -6,7 +6,7 @@
             <p>{{ post.title }} | Создан: {{ post.time_create }} | Автор объявления: {{ post.author }}</p>
         </div>
 
-        <p>{{ post.content }}</p>
+        <p>{{ post.content|safe }}</p>
         <hr>
         <div>
             {% if user == post.author %} <!--если юзер - это автор объявления-->

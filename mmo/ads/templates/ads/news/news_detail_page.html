@@ -5,6 +5,6 @@
     <div class="title">
         <p>{{ news.title }} | От: {{ news.time_create }} | Автор: {{ news.author }}</p>
     </div>
-    <p>{{ news.content }}</p>
+    <p>{{ news.content|safe }}</p>
 </div>
 {% endblock content %}

@@ -2,7 +2,6 @@
 {% load custom_tags %}
 
 {% block content %}
-{% include 'ads/filter_form.html' %} <!--включаю шаблон с формой для фильтрации-->
     {% if posts %}<!--если есть-->
         {% for p in posts %}
             <div class="post-background">
