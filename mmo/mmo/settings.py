@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_filters',
     'django_ckeditor_5',
+    'debug_toolbar',
 
 ]
 
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mmo.urls'
@@ -231,3 +233,5 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+INTERNAL_IPS = ['127.0.0.1', ]
