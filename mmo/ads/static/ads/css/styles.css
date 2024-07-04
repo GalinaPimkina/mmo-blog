@@ -24,12 +24,24 @@ a {
 
 .last {
     float: right;
-    margin: 0px;
+}
+
+.last-top {
+    float: right;
+    object-position: right top;
+    margin: 20px 0px 0px 0px;
+}
+
+.last-bottom {
+    float: right;
+    object-position: right bottom;
+    margin: -30px 0px 0px 0px;
 }
 
 .post-background {
     width: 100%;
     background: #FDF5E6;
+    min-height: 100px;
 }
 
 .title {

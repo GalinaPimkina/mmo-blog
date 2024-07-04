@@ -6,11 +6,9 @@
             <div class="post-background">
                 <div class="content">
                     <div class="title">
-                        <p>{{ n.title }} | От: {{ n.time_create }}</p>
+                        <p><a href="{{ n.get_absolute_url }}">{{ n.title }} | От: {{ n.time_create }}</a></p>
                     </div>
-
                     <p>{{ n.content|safe }}</p>
-                    <a href="{% url 'ads:news_detail' n.news_slug %}">Подробнее...</a>
                 </div>
             </div>
         {% endfor %}

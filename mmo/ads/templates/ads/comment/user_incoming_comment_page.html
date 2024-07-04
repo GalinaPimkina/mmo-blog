@@ -3,8 +3,10 @@
 
 {% block content %}
 {% include 'ads/filter_form.html' %} <!--включаю шаблон с формой для фильтрации-->
-        {% if comment %}<!--если есть-->
-            {% for c in comment %}
+    {% if comment %}<!--если есть-->
+        {% for c in comment %}
+            <div class="last-top"><a href="{{ c.get_success_url }}">Открыть</a></div>
+
             <div class="post-background">
                 <div class="content">
                     <div class="title">
@@ -12,16 +14,18 @@
                     </div>
 
                     <p>К объявлению: {{ c.post.title }}</p>
-                    <p>{{ c.content|truncatewords:3 }}</p>
-                    <p><a href="{{ c.get_success_url }}">Просмотреть</a></p>
-                    {% if c.processed %}<!--если отклик ОБРАБОТАН-->
-                        <p>Обработан</p>
-                    {% else %}<!--если отклик НЕ ОБРАБОТАН-->
-                        <p>Не обработан</p>
-                    {% endif %}
+
+                    <div class="last-bottom">
+                        {% if c.processed %}<!--если отклик ОБРАБОТАН-->
+                            <p>Обработан</p>
+                        {% else %}<!--если отклик НЕ ОБРАБОТАН-->
+                            <p>Не обработан</p>
+                        {% endif %}
+                    </div>
+
                 </div>
             </div>
-            {% endfor %}
+        {% endfor %}
 
         {% else %}<!--если пустой queryset-->
             <div>
