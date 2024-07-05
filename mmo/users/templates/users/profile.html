@@ -9,7 +9,6 @@
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <input type="hidden" name="next" value="{{ next }}">
       {{ form.as_p }}
 
         {% if subs %}<!--если подписки есть-->

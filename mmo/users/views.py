@@ -10,7 +10,7 @@ from django.views.generic import CreateView, UpdateView
 from ads.models import Subscriber
 from ads.utils import DataMixin
 from .forms import LoginUserForm, RegistrationUserForm, ProfileUserForm, ConfirmEmailForm
-from .models import User
+from .models import Profile
 
 
 class LoginUserView(DataMixin, LoginView):
@@ -62,7 +62,7 @@ class ConfirmEmailView(DataMixin, UpdateView):
     просматривать новости и объявления, оставлять и изменять свои объявления, отвечать на объявления. группе пользователей moderator доступны дополнительно
     права на создание и редактирование новостей сайта news. пользователь admin наделен всеми доступными правами'''
 
-    model = User
+    model = Profile
     form_class = ConfirmEmailForm
     template_name = 'users/confirm_email.html'
 
@@ -73,8 +73,8 @@ class ConfirmEmailView(DataMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         if 'token' in request.POST: # если токен есть в коллекции пост
             token = request.POST['token']
-            user = User.objects.filter(token=token) # ищу всех юзеров по совпадению токена(он будет 1 в queryset, т.к. token обнуляется после регистрации)
-            user_for_group = User.objects.get(token=token) # полученаю по токену конкретного юзера (не queryset)
+            user = Profile.objects.filter(token=token) # ищу всех юзеров по совпадению токена(он будет 1 в queryset, т.к. token обнуляется после регистрации)
+            user_for_group = Profile.objects.get(token=token) # полученаю по токену конкретного юзера (не queryset)
             if user.exists(): # если queryset содержит запись
                 user.update(is_active=True) # меняю статус на активный
                 user_for_group.groups.add(3) # при регистрации юзер автоматически получает группу "default_user"
@@ -88,7 +88,7 @@ class ConfirmEmailView(DataMixin, UpdateView):
 class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
     '''страница профиля пользователя, его можно редактировать'''
 
-    model = User
+    model = Profile
     form_class = ProfileUserForm
     template_name = 'users/profile.html'
     context_object_name = 'profile'

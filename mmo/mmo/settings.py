@@ -85,10 +85,19 @@ WSGI_APPLICATION = 'mmo.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'default': {
+            # 'ENGINE': 'django.db.backends.postgresql',
+            # 'NAME': 'mmo_db',
+            # 'USER': 'postgres',
+            # 'PASSWORD': '1234',
+            # 'HOST': 'localhost',
+            # 'PORT': 5432,
+
+
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+
+        }
 }
 
 
@@ -133,7 +142,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "users.User" # расширенная модель юзера
+AUTH_USER_MODEL = "users.Profile" # расширенная модель юзера
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -174,6 +183,7 @@ customColorPalette = [
 
 # CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
 # CKEDITOR_5_FILE_STORAGE = "path_to_storage.CustomStorage" # optional
+
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['heading', '|', 'bold', 'italic', 'link',
@@ -231,7 +241,7 @@ CKEDITOR_5_CONFIGS = {
             'startIndex': 'true',
             'reversed': 'true',
         }
-    }
+    },
 }
 
 INTERNAL_IPS = ['127.0.0.1', ]

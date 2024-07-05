@@ -12,5 +12,5 @@ urlpatterns = [
     path('registration/', views.RegistrationUserView.as_view(), name='registration'),#регистрация
     path('registration/confirm_email/<int:pk>/', views.ConfirmEmailView.as_view(), name='confirm_email'),#подтверждение почты
 
-    path('profile/<int:pk>/', views.ProfileUserView.as_view(), name='profile'), #
+    path('profile/<int:pk>/', views.ProfileUserView.as_view(), name='profile'), #профиль пользователя
 ]
