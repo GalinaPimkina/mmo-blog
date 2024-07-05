@@ -3,41 +3,16 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .filters import CommentFilter
-from .forms import AddPostForm, AddNewsForm, CreateCommentForm
-from .models import Post, News, Category, Comment, Subscriber
+from .forms import AddPostForm, CreateCommentForm
+from .models import Post, Category, Comment, Subscriber
 from .utils import DataMixin
 
 
 class IndexPageView(DataMixin, ListView):
-    '''главная страница с новостями платформы'''
-
-    model = News
-    template_name = 'ads/index.html'
-    context_object_name = 'news'
-    paginate_by = 3
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Главная страница')
-
-
-class CategoryPageView(DataMixin, ListView):
-    '''страница всех категорий'''
-
-    model = Category
-    template_name = 'ads/category/category_page.html'
-    context_object_name = 'categories'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Классы')
-
-
-class AllPostPageView(DataMixin, ListView):
-    '''страница всех объявлений от свежих к старым'''
+    '''главная страница с объявлениями'''
 
     model = Post
-    template_name = 'ads/post/all_posts_page.html'
+    template_name = 'ads/index.html'
     context_object_name = 'posts'
     paginate_by = 3
 
@@ -46,7 +21,7 @@ class AllPostPageView(DataMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Все объявления')
+        return self.get_mixin_context(context, title='Главная страница')
 
 
 class PostDetailPageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, DetailView):
@@ -149,39 +124,16 @@ def close_post(request, post_slug):
     return redirect('ads:post_detail', post_slug=post_slug)
 
 
-class NewsDetailPageView(PermissionRequiredMixin, DataMixin, DetailView):
-    '''страница конкретного поста'''
+class CategoryPageView(DataMixin, ListView):
+    '''страница всех категорий'''
 
-    model = News
-    template_name = 'ads/news/news_detail_page.html'
-    slug_url_kwarg = 'news_slug'
-    slug_field = 'news_slug'
-    context_object_name = 'news'
-    permission_required = ['ads.view_news', ]
+    model = Category
+    template_name = 'ads/category/category_page.html'
+    context_object_name = 'categories'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=context['news'].title)
-
-
-class NewsCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
-    '''добавление новости'''
-
-    model = News
-    form_class = AddNewsForm
-    template_name = 'ads/news/add_news.html'
-    permission_required = ['ads.add_news', ]
-
-    def form_valid(self, form):
-        '''автоматическое присвоение автора'''
-
-        post = form.save(commit=False)
-        post.author = self.request.user
-        return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Добавить новость')
+        return self.get_mixin_context(context, title='Классы')
 
 
 class CommentCreatePageView(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Category, Comment, News
+from .models import Post, Category, Comment
 
 
 @admin.register(Post)
@@ -21,9 +21,3 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ['post', 'destination_user', 'author', 'time_create', 'time_update', 'processed']
     ordering = ['time_create', ]
 
-
-@admin.register(News)
-class NewsAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'time_create', 'time_update']
-    list_display_links = ['title', ]
-    ordering = ['time_create', 'title']

@@ -69,28 +69,6 @@ class Comment(models.Model):
         verbose_name_plural = "Отклики"
 
 
-class News(models.Model):
-    '''модель новостей сайта, отображается на главной странице index'''
-
-    title = models.CharField(max_length=255, verbose_name='Заголовок')
-    content = CKEditor5Field(verbose_name='Контент', config_name='extends')
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="news", verbose_name="Автор новости")
-    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
-    time_update = models.DateTimeField(auto_now=True, verbose_name="Изменено")
-    news_slug = AutoSlugField(populate_from='title', db_index=True, unique=True, verbose_name='URL')
-
-    def __str__(self):
-        return f"{self.time_create} - {self.title}"
-
-    def get_absolute_url(self):
-        return reverse('ads:news_detail', kwargs={'news_slug': self.news_slug})
-
-    class Meta:
-        ordering = ['-time_create']
-        verbose_name = "Новость"
-        verbose_name_plural = "Новости"
-
-
 class Subscriber(models.Model):
     '''модель подписки юзера на категории'''
 
