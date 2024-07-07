@@ -18,19 +18,27 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib.auth.decorators import login_required
+from ckeditor_uploader.views import upload
 from . import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('ads.urls', namespace='ads')),
     path('users/', include('users.urls', namespace='users')),
-    path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
-
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+urlpatterns += [
+    path('ckeditor/upload/', login_required(upload), name='ckeditor_upload'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+]
+
 
 admin.site.site_header = "Панель администратора"
 admin.site.index_title = ""

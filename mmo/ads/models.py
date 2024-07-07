@@ -1,7 +1,7 @@
 from django.db import models
 from autoslug import AutoSlugField
 from django.urls import reverse
-from django_ckeditor_5.fields import CKEditor5Field
+from ckeditor_uploader.fields import RichTextUploadingField
 
 from users.models import Profile
 
@@ -10,7 +10,7 @@ class Post(models.Model):
     '''модель объявлений для поиска других авантюристов'''
 
     title = models.CharField(max_length=100, verbose_name="Заголовок")
-    content = CKEditor5Field(verbose_name='Контент', config_name='extends')
+    content = RichTextUploadingField()
     category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="post", verbose_name="Класс")
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name="post", verbose_name="Автор поста")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
