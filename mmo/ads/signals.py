@@ -13,10 +13,10 @@ def new_comment(sender, instance, created, **kwargs):
 
     if created:
         send_mail(
-            'You have one new comment',
-            f'New comment at post: {post}',
-            'service.mmoblog@gmail.com',
-            [post.author.email],
+            subject='Новый отклик',
+            message=f'У вас новый отклик на сайте к объявлению: {post}',
+            from_email=None,
+            recipient_list=[post.author.email],
             fail_silently=False,
         )
 
@@ -28,10 +28,10 @@ def new_comment(sender, instance, **kwargs):
 
     if instance.processed:
         send_mail(
-            'You comment was processed',
-            f'{post.author} processed your comment: {instance}',
-            'service.mmoblog@gmail.com',
-            [instance.author.email],
+            subject='You comment was processed',
+            message=f'{post.author} processed your comment: {instance}',
+            from_email=None,
+            recipient_list=[instance.author.email],
             fail_silently=False,
         )
 

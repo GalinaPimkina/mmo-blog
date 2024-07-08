@@ -44,10 +44,10 @@ class RegistrationUserView(DataMixin, CreateView):
         user.save()
 
         send_mail(
-            'Подтвердите свой электронный адрес',
-            f'Код активации: {user.token}',
-            'service.mmoblog@gmail.com',
-            [user.email],
+            subject='Подтверждение e-mail адреса',
+            message=f'Код активации: {user.token}',
+            from_email=None,
+            recipient_list=[user.email],
             fail_silently=False,
         )
 

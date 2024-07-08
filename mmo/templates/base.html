@@ -25,7 +25,7 @@
             </div>
 
             <div class="last">
-                <a href="{% url 'users:profile' user.id %}">{{ user.nickname }}</a>
+                <a href="{% url 'users:profile' user.id %}">{{ user.username }}</a>
                 <a href="{% url 'users:logout' %}">Выйти</a>
             </div>
 

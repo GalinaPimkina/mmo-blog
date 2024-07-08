@@ -87,16 +87,16 @@ WSGI_APPLICATION = 'mmo.wsgi.application'
 
 DATABASES = {
         'default': {
-            # 'ENGINE': 'django.db.backends.postgresql',
-            # 'NAME': 'mmo_db',
-            # 'USER': 'postgres',
-            # 'PASSWORD': '1234',
-            # 'HOST': 'localhost',
-            # 'PORT': 5432,
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'mmo_db',
+            'USER': 'postgres',
+            'PASSWORD': '1234',
+            'HOST': 'localhost',
+            'PORT': 5432,
 
 
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': BASE_DIR / 'db.sqlite3',
 
         }
 }
@@ -157,8 +157,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'ads:index'
 LOGOUT_REDIRECT_URL = 'ads:index'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #для упроценной проверки рассылок делаю их в консоль
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -227,3 +225,15 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #для упроценной проверки рассылок делаю их в консоль
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "novikova-box@yandex.ru"
+EMAIL_HOST_PASSWORD = "hdhqsfzezxrifrkj"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = "novikova-box@yandex.ru"
