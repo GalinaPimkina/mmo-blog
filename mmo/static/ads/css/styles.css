@@ -1,0 +1,60 @@
+body {
+    background-color: #DCDCDC;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header {
+  list-style: none;
+  padding: 10px;
+  height: 30px;
+  background: #FDF5E6;
+}
+
+.header a {
+    padding: 10px;
+}
+
+.menu {
+    display: inline;
+    padding: 10px;
+}
+
+.last {
+    float: right;
+}
+
+.last-top {
+    float: right;
+    object-position: right top;
+    margin: 20px 0px 0px 0px;
+}
+
+.last-bottom {
+    float: right;
+    object-position: right bottom;
+    margin: -30px 0px 0px 0px;
+}
+
+.post-background {
+    width: 100%;
+    background: #FDF5E6;
+    min-height: 100px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.content p, a{
+    padding: 5px 20px;
+    margin: 10px;
+}
+
+.pagination {
+    padding: 5px 20px;
+    margin: 10px;
+}
