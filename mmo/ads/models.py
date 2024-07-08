@@ -60,7 +60,7 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.time_create} - {self.post}"
 
-    def get_success_url(self):
+    def get_absolute_url(self):
         return reverse('ads:comment_detail', kwargs={'pk': self.pk})
 
     class Meta:
@@ -74,3 +74,24 @@ class Subscriber(models.Model):
 
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="subscribe", verbose_name="Юзер")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="subscribe", verbose_name="Категория")
+
+
+class News(models.Model):
+    '''новости сервиса'''
+
+    title = models.CharField(max_length=150, verbose_name="Заголовок")
+    content = RichTextUploadingField()
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Изменен")
+    news_slug = AutoSlugField(populate_from='title', db_index=True, unique=True, verbose_name='URL')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('ads:news_detail', kwargs={'news_slug': self.news_slug})
+
+    class Meta:
+        ordering = ['-time_create']
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"

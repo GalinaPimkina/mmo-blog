@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .filters import CommentFilter
 from .forms import AddPostForm, CreateCommentForm
-from .models import Post, Category, Comment, Subscriber
+from .models import Post, Category, Comment, Subscriber, News
 from .utils import DataMixin
 
 
@@ -270,3 +270,31 @@ def unsubscribe(request, category_slug):
     category = Category.objects.get(category_slug=category_slug)
     Subscriber.objects.filter(user=user, category=category).delete()
     return redirect('users:profile', pk=user.pk)
+
+
+class NewsPageView(DataMixin, ListView):
+    '''страница с новостями сервиса'''
+
+    model = News
+    template_name = 'ads/news/all_news_page.html'
+    context_object_name = 'news'
+    paginate_by = 3
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='Новости')
+
+
+class NewsDetailPageView(DataMixin, DetailView):
+    '''страница конкретной новости'''
+
+    model = News
+    template_name = 'ads/news/news_detail_page.html'
+    slug_url_kwarg = 'news_slug'
+    slug_field = 'news_slug'
+    context_object_name = 'news'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=context['news'].title, )

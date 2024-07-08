@@ -12,7 +12,8 @@
 {% block menu %}
     <div class="header">
         <div class="menu"><!--для всех юзеров-->
-            <a href="{% url 'ads:index' %}">Главная страница</a>
+            <a href="{% url 'ads:all_news' %}">Новости</a>
+            <a href="{% url 'ads:index' %}">Все объявления</a>
             <a href="{% url 'ads:categories' %}">Объявления по классам</a>
         </div>
 

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="post-background">
+        <div class="title">
+            <p>{{ news.title }} | От: {{ news.time_create }}</p>
+        </div>
+        <p>{{ news.content|safe }}</p>
+    </div>
+{% endblock content %}

@@ -28,4 +28,7 @@ urlpatterns = [
 
     path('comment/<int:pk>/receive/', views.comment_receive, name='comment_receive'), #если отклик принят
     path('comment/<int:pk>/rejected/', views.comment_rejected, name='comment_rejected'),#если отклик отклонен
+
+    path('news/', views.NewsPageView.as_view(), name='all_news'),#страница новостей
+    path('news/<str:news_slug>/', views.NewsDetailPageView.as_view(), name='news_detail'),#страница выбранной новости
 ]

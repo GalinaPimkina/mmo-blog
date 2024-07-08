@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if news %}<!--если есть-->
+        {% for n in news %}
+            <div class="post-background">
+                <div class="content">
+                    <div class="title">
+                        <p><a href="{{ n.get_absolute_url }}">{{ n.title }} | От: {{ n.time_create }}</a></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}<!--если пустой queryset-->
+        <div>
+            <p>Записи отсутствуют.</p>
+        </div>
+    {% endif %}
+{% endblock content %}

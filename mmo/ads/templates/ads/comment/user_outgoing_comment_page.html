@@ -5,7 +5,7 @@
 {% include 'ads/filter_form.html' %} <!--включаю шаблон с формой для фильтрации-->
     {% if comment %}<!--если есть-->
         {% for c in comment %}
-            <div class="last-top"><a href="{{ c.get_success_url }}">Открыть</a></div>
+            <div class="last-top"><a href="{{ c.get_absolute_url }}">Открыть</a></div>
 
             <div class="post-background">
                 <div class="content">
