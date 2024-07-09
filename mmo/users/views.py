@@ -3,9 +3,11 @@ import random
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
+
 
 from ads.models import Subscriber
 from ads.utils import DataMixin
@@ -74,11 +76,14 @@ class ConfirmEmailView(DataMixin, UpdateView):
         if 'token' in request.POST: # если токен есть в коллекции пост
             token = request.POST['token']
             user = Profile.objects.filter(token=token) # ищу всех юзеров по совпадению токена(он будет 1 в queryset, т.к. token обнуляется после регистрации)
-            user_for_group = Profile.objects.get(token=token) # полученаю по токену конкретного юзера (не queryset)
+            user_for_group = Profile.objects.get(token=token) # получаю по токену конкретного юзера (не queryset)
             if user.exists(): # если queryset содержит запись
                 user.update(is_active=True) # меняю статус на активный
-                user_for_group.groups.add(3) # при регистрации юзер автоматически получает группу "default_user"
-                user.update(token=None) # обнуление токена, чтоб не было совпадений при последующих регистрациях
+                user.update(token=None)  # обнуление токена, чтоб не было совпадений при последующих регистрациях
+                try:
+                    user_for_group.groups.add(3) # при регистрации юзер автоматически получает группу "default_user"
+                except IntegrityError:
+                    return render(request, "users/create_groups_permission.html", {'title': 'Ошибка при регистрации'})
             else:
                 return render(request, 'users/confirm_failed.html', {'title': 'Подтверждение не удалось', 'pk': self.kwargs['pk']}) #если токен введен с ошибкой
 
@@ -96,7 +101,7 @@ class ProfileUserView(LoginRequiredMixin, DataMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context,
-                                      title=f'Профиль пользователя {self.request.user.nickname}',
+                                      title=f'Профиль пользователя {self.request.user.username}',
                                       subs=Subscriber.objects.filter(user=self.request.user))
 
     def get_success_url(self):
