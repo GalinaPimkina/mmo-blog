@@ -222,18 +222,18 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #для упроценной проверки рассылок делаю их в консоль
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #для упроценной проверки рассылок делаю их в консоль
 
 
 
 # !!!!!!!!!письма на email рассылаются корректно, но иногда блокируются как спам, из-за чего вылезает ошибка
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_PORT = 465
-# EMAIL_HOST_USER = "novikova-box@yandex.ru"
-# EMAIL_HOST_PASSWORD = "hdhqsfzezxrifrkj"
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "novikova-box@yandex.ru"
+EMAIL_HOST_PASSWORD = "hdhqsfzezxrifrkj"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = "novikova-box@yandex.ru"
